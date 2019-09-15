@@ -17,6 +17,7 @@ class JobCategoryController extends Controller
     {
         //$category_id=3;
         $job_categories=JobCategory::all();
+        //return $job_categories;
         return view('job/category', compact('job_categories'));
         //return $jobs=Job::get()->where('job_category',$category_id);
     }
