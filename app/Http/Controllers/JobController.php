@@ -118,14 +118,16 @@ class JobController extends Controller
             if($pay_status=="success"){
                 $job->save();
                 $message='New Job Added';
-                $ret=redirect()->back(100);
+                Alert::success('Edjuma Jobs', $message);
+                $ret=redirect()->to('/');
             }else{
                 $message='Unsuccessful Job Posting Process, Please Try Again';
+                Alert::danger('Edjuma Jobs', $message);
                 $ret=redirect()->back(200);
             }
 
         }
-        Alert::info('Edjuma Jobs', $message);
+
         return $ret;
     }
 
