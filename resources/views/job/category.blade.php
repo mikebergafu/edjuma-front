@@ -34,62 +34,14 @@
 
             <!-- Popular Categories -->
             <div class="categories-boxes-container">
-
+                @foreach($job_categories as $job_category )
                 <!-- Box -->
-                <a href="{{route('jobs.by.category',[$job_categories[0]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                    <i class="ln ln-icon-Laptop-Phone"></i>
-                    <h4>{{$job_categories[0]->name}}</h4>
-                    <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[0]->id)}}</span>
+                <a href="{{route('jobs.by.category',[$job_category->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
+                    <i class="ln ln-icon-{{$job_category->icon}}"></i>
+                    <h4>{{$job_category->name}}</h4>
+                    <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_category->id)}}</span>
                 </a>
-
-                <!-- Box -->
-                <a href="{{route('jobs.by.category',[$job_categories[1]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                    <i class="ln ln-icon-Cash-register2"></i>
-                    <h4>{{$job_categories[1]->name}}</h4>
-                    <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[1]->id)}}</span>
-                </a>
-
-                <!-- Box -->
-                <a href="{{route('jobs.by.category',[$job_categories[2]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                    <i class="ln ln-icon-Forest"></i>
-                    <h4>{{$job_categories[2]->name}}</h4>
-                    <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[2]->id)}}</span>
-                </a>
-
-                <!-- Box -->
-                <a href="{{route('jobs.by.category',[$job_categories[3]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                    <i class="ln ln-icon-Worker-Clothes"></i>
-                    <h4>{{$job_categories[3]->name}}</h4>
-                    <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[3]->id)}}</span>
-                </a>
-
-                <!-- Box -->
-                <a href="{{route('jobs.by.category',[$job_categories[4]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                    <i class="ln ln-icon-Medical-Sign"></i>
-                    <h4>{{$job_categories[4]->name}}</h4>
-                    <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[4]->id)}}</span>
-                </a>
-
-                <!-- Box -->
-                <a href="{{route('jobs.by.category',[$job_categories[5]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                    <i class="ln ln-icon-Plates"></i>
-                    <h4>{{$job_categories[5]->name}}</h4>
-                    <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[5]->id)}}</span>
-                </a>
-
-                <!-- Box -->
-                <a href="{{route('jobs.by.category',[$job_categories[6]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                    <i class="ln ln-icon-Car"></i>
-                    <h4>{{$job_categories[6]->name}}</h4>
-                    <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[6]->id)}}</span>
-                </a>
-
-                <!-- Box -->
-                <a href="{{route('jobs.by.category',[$job_categories[7]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                    <i class="ln ln-icon-Arrow-Next"></i>
-                    <h4>{{$job_categories[7]->name}}</h4>
-                    <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[7]->id)}}</span>
-                </a>
+                    @endforeach
 
             </div>
 
