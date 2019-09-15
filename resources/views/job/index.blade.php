@@ -29,6 +29,9 @@ Manage Jobs - Edjuma.com
     ================================================== -->
     <!-- Container -->
     <div class="container">
+        @if(Session::has('message'))
+            <p class="alert alert-success">{{ Session::get('message') }}</p>
+        @endif
 
         <!-- Table -->
         <div class="sixteen columns">
@@ -63,6 +66,7 @@ Manage Jobs - Edjuma.com
                 <!-- Items -->
                 @foreach($my_job_postings as $my_job_posting)
                     <tr>
+
                         <td class="title"><a href="{{route('this.jobs.applicants',$my_job_posting->id)}}">{{$my_job_posting->job_title}}
                                 <br><span class="pending" ><a style="color: #26ae61;" href="{{route('home')}}">{{\App\Helpers\Sitso::getJobCategory($my_job_posting->job_category)}}</a></span></a></td>
                         <td class="centered"><i class="fa fa-check"></i></td>
@@ -72,7 +76,7 @@ Manage Jobs - Edjuma.com
                         <td class="centered"><a href="{{route('this.jobs.applicants',$my_job_posting->id)}}" class="button">{{\App\Helpers\Sitso::getThisApplicantCount($my_job_posting->id,Auth::user()->id)}}</a></td>
                         <td class="action">
                             <a href="#" class="" style="color: #0b7bb5;"><i class="fa fa-pencil" style="color: #0b7bb5;"></i>Edit</a>
-                            <a href="#" class="" style="color: #ee3c31;"><i class="fa fa-trash" style="color: #ee3c31;"></i>Delete</a>
+                            <a href="{{route('delete.jobs',$my_job_posting->id)}}" class="" style="color: #ee3c31;"><i class="fa fa-trash" style="color: #ee3c31;"></i>Delete</a>
                         </td>
                     </tr>
                 @endforeach
@@ -82,22 +86,7 @@ Manage Jobs - Edjuma.com
             <div class="clearfix"></div>
 
             <div class="pagination-container">
-                <nav class="pagination">
-                    <ul>
-                        <li><a href="#" class="current-page">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li class="blank">...</li>
-                        <li><a href="#">22</a></li>
-                    </ul>
-                </nav>
-
-                <nav class="pagination-next-prev">
-                    <ul>
-                        <li><a href="#" class="prev">Previous</a></li>
-                        <li><a href="#" class="next">Next</a></li>
-                    </ul>
-                </nav>
+                {{$my_job_postings->links()}}
             </div>
 
             <br>
@@ -106,6 +95,7 @@ Manage Jobs - Edjuma.com
         </div>
 
     </div>
+
 
 
 @endsection

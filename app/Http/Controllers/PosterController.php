@@ -9,6 +9,7 @@ use App\poster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class PosterController extends Controller
 {
@@ -32,7 +33,7 @@ class PosterController extends Controller
         $my_job_postings=DB::table('jobs')
             ->where('created_by',Auth::user()->id)
             ->orderBy('created_at','DESC')
-            ->get();
+            ->paginate(5);
 
         return view('job/index', compact('my_job_postings'));
         //return $my_job_postings;
@@ -99,9 +100,24 @@ class PosterController extends Controller
      * @param  \App\poster  $poster
      * @return \Illuminate\Http\Response
      */
-    public function destroy(poster $poster)
+    public function destroy($poster)
     {
-        //
+            $delete_job = Job::where('id',$poster)->delete();
+
+            if ($delete_job){
+
+                session()->flash('message', 'Job Deleted');
+                Session::flash('type', 'success');
+                Session::flash('title', 'Success');
+                return redirect()->back();
+
+            }else{
+                session()->flash('message', 'Delete Job Failed');
+                Session::flash('type', 'error');
+                Session::flash('title', 'error');
+                return redirect()->back();
+            }
+
     }
 
     public function getMyApplicants()

@@ -62,25 +62,27 @@ class JobController extends Controller
      */
     public function store(Request $request)
     {
+        //return $request->all();
         $validator = Validator::make($request->all(), [
             'job_title' => 'required|string|max:50',
-            'category' => 'required|string|max:50',
+            /*'category' => 'required|string|max:50',
             'job_description' => 'required|string|max:250',
             'job_starts' => 'required|date|max:10',
             'job_ends' => 'required|date|max:10',
             'job_location' => 'required|string|max:50',
             'number_of_staff' => 'required|integer',
             'salary' => 'required|string|max:10',
-            'salary_frequency' => 'required|string|max:20',
+            'salary_frequency' => 'required|string|max:20',*/
 
             //'mobile_no' => 'required|string|max:15',
-            'channel' => 'required|string|max:20',
+            //'channel' => 'required|string|max:20',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
+
         } else {
             $job =new Job();
             $job->job_title = $request->input('job_title');
@@ -115,7 +117,7 @@ class JobController extends Controller
 
             if($pay_status=="success"){
                 $job->save();
-                $message='New Job Successfully Added';
+                $message='New Job Added';
                 $ret=redirect()->to('/');
             }else{
                 $message='Unsuccessful Job Posting Process, Please Try Again';

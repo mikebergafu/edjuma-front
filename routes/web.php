@@ -38,6 +38,7 @@ Route::get('jobs/category/list/{category}/{uuid}', 'FreeViewController@getJobsBy
 Route::get('jobs/posters/{uuid}/jobs', 'PosterController@index')->name('my.job.postings');
 Route::get('jobs/posters/{uuid}/applicants', 'PosterController@getMyApplicants')->name('my.jobs.applicants');
 Route::get('jobs/posters/job/applicants/{job_id}', 'PosterController@getThisJobsApplicants')->name('this.jobs.applicants');
+Route::get('jobs/posters/delete/{job_id}', 'PosterController@destroy')->name('delete.jobs');
 
 Route::get('jobs/applicant/job/pro/status/{id}', 'ProController@showProDetails')->name('this.pro.status');
 

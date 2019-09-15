@@ -28,13 +28,20 @@
     <link rel="stylesheet" href="{{asset('edjuma/css/colors/green.css')}}" id="colors">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.9/sweetalert2.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.9/sweetalert2.min.js"></script>
+
+
+    <link href="{{asset('vendor/datatables/dataTables.bootstrap4.css')}}" rel="stylesheet">
+    <script src="{{ asset('js/app.js') }}" defer></script>
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{asset('edjuma/css/colors/green.css')}}" id="colors">
     <!-- Styles -->
     {{--<link href="{{ asset('css/app.css') }}" rel="stylesheet">--}}
 
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    @yield('styles')
+    {{--@yield('styles')--}}
+
 </head>
 
 <body>
@@ -110,14 +117,7 @@
     {{--Place Banner Here--}}
     @yield('content')
 
-    <!-- Content
-    ================================================== -->
-
-
-    {{--Place Content Here--}}
-
-
-
+    @include('modals/jobs/add-date-modal')
     <!-- Footer
     ================================================== -->
     <div class="margin-top-30"></div>
@@ -156,10 +156,10 @@
 ================================================== -->
 <script src="{{asset('edjuma/scripts/switcher.js')}}"></script>
 
-<div id="style-switcher">
+{{--<div id="style-switcher">
     <h2>Style Switcher <a href="#"></a></h2>
 
-    <div>
+    --}}{{--<div>
         <h3>Predefined Colors</h3>
         <ul class="colors" id="color1">
             <li><a href="#" class="green" title="Green"></a></li>
@@ -229,21 +229,56 @@
             <li><a href="#" class="purple-bg" title="Purple"></a></li>
             <li><a href="#" class="red-bg" title="Red"></a></li>
             <li><a href="#" class="pink-bg" title="Pink"></a></li>
-            <li><a href="#" class="celadon-bg" title="Celadon"></a></li>
+            <li><a href="#" class="celadon-bg" title="Celadon"></a></li>s
             <li><a href="#" class="brown-bg" title="Brown"></a></li>
             <li><a href="#" class="cherry-bg" title="Cherry"></a></li>
             <li><a href="#" class="cyan-bg" title="Cyan"></a></li>
             <li><a href="#" class="gray-bg" title="Gray"></a></li>
             <li><a href="#" class="olive-bg" title="Olive"></a></li>
         </ul>
-    </div>
+    </div>--}}{{--
 
     <div id="reset"><a href="#" class="button color">Reset</a></div>
     @include('sweetalert::alert')
 
-</div>
+</div>--}}
 
-@yield('scripts')
+{{--@yield('scripts')--}}
+<script src="{{asset('vendor/datatables/jquery.dataTables.js')}}"></script>
+<script src="{{asset('vendor/datatables/dataTables.bootstrap4.js')}}"></script>
+<script src="{{asset('vendor/datatables/bergyDTController.min.js')}}"></script>
+<script>
+    $('#start_date').click(function() {
+        $('#modelWindow').modal('show');
+    });
+
+</script>
+<script>
+    $(function(){
+        $('.nav a').click(function(){
+            $(this).parent().attr('id','current').siblings().removeAttr('current')
+        })
+    })
+</script>
+
+<script>
+    // A $( document ).ready() block.
+    $( document ).ready(function() {
+        var url = "https://webhook.site/51a071d4-09fa-4d06-923a-e1563c0deecd";
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                // Typical action to be performed when the document is ready:
+                alert(xhttp.responseText);
+            }
+        };
+        xhttp.open("POST", url, true);
+        xhttp.send();
+    });
+</script>
+
+
+
 <!--Start of Tawk.to Script-->
 <script type="text/javascript">
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();

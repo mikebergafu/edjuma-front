@@ -193,11 +193,11 @@
         </div>
 
     </div>
-    @include('modals/jobs/add-date-modal')
+   {{-- @include('modals/jobs/add-date-modal')--}}
 
 @endsection
 
-@section('scripts')
+{{--@section('scripts')
     <script src="{{asset('vendor/datatables/jquery.dataTables.js')}}"></script>
     <script src="{{asset('vendor/datatables/dataTables.bootstrap4.js')}}"></script>
     <script src="{{asset('vendor/datatables/bergyDTController.min.js')}}"></script>
@@ -223,4 +223,4 @@
             xhttp.send();
         });
     </script>
-@endsection
+@endsection--}}
