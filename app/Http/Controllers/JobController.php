@@ -118,7 +118,7 @@ class JobController extends Controller
             if($pay_status=="success"){
                 $job->save();
                 $message='New Job Added';
-                $ret=redirect()->to('/');
+                $ret=redirect()->back(100);
             }else{
                 $message='Unsuccessful Job Posting Process, Please Try Again';
                 $ret=redirect()->back(200);

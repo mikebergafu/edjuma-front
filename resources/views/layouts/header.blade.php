@@ -26,21 +26,25 @@
     ================================================== -->
     <link rel="stylesheet" href="{{asset('edjuma/css/style.css')}}">
     <link rel="stylesheet" href="{{asset('edjuma/css/colors/green.css')}}" id="colors">
+    <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.9/sweetalert2.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.9/sweetalert2.min.js"></script>
+
+
+
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 
 
     <link href="{{asset('vendor/datatables/dataTables.bootstrap4.css')}}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}" defer></script>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('edjuma/css/colors/green.css')}}" id="colors">
-    <!-- Styles -->
-    {{--<link href="{{ asset('css/app.css') }}" rel="stylesheet">--}}
 
-    <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     {{--@yield('styles')--}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
 </head>
 
@@ -113,6 +117,12 @@
         </div>
     </header>
     <div class="clearfix"></div>
+    @if(Session::has('message'))
+        <p><a href="#ex1" rel="modal:open">Open Modal</a></p>
+    @endif
+    <div id="ex1" class="modal">
+        <p class="alert alert-success">{{ Session::get('message') }}</p>
+    </div>
 
     {{--Place Banner Here--}}
     @yield('content')
@@ -242,7 +252,7 @@
     @include('sweetalert::alert')
 
 </div>--}}
-
+@include('sweetalert::alert')
 {{--@yield('scripts')--}}
 <script src="{{asset('vendor/datatables/jquery.dataTables.js')}}"></script>
 <script src="{{asset('vendor/datatables/dataTables.bootstrap4.js')}}"></script>

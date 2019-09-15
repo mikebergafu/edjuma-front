@@ -29,9 +29,6 @@ Manage Jobs - Edjuma.com
     ================================================== -->
     <!-- Container -->
     <div class="container">
-        @if(Session::has('message'))
-            <p class="alert alert-success">{{ Session::get('message') }}</p>
-        @endif
 
         <!-- Table -->
         <div class="sixteen columns">
