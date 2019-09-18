@@ -218,7 +218,7 @@ class JobController extends Controller
     }
 
     public function getMyJobs(){
-        $my_jobs=DB::table('job_seekers')->where('created_by',Auth::user()->id)->get();
+        $my_jobs=DB::table('job_seekers')->where('created_by',Auth::user()->id)->paginate(4);
         return view('job/applied_jobs', compact('my_jobs'));
         //return $my_jobs;
 

@@ -73,6 +73,9 @@
                         <strong style="color: #26ae61;" >{{\App\Helpers\Sitso::getMyJob($job->job_id)}}</strong>
                     </dt>
                 @endforeach
+                <div class="pagination">
+                    {{$my_jobs->links()}}
+                </div>
 
             </dl>
 
