@@ -29,24 +29,21 @@
 
         <div class="my-account">
 
-
-
-
             <article class="card">
                 <div class=" p-5">
 
                     <ul class="nav bg radius nav-pills nav-fill mb-3" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="pill" href="#nav-tab-card">
-                                <i class="ln ln-icon-Male"></i> SignUp</a></li>
-                        <li class="nav-item">
                             <a class="nav-link active show" data-toggle="pill" href="#nav-tab-paypal">
-                                <i class="ln ln-icon-Lock-2"></i>  Login</a></li>
+                                <i class="ln ln-icon-Male"></i> SignUp</a></li>
 
+                        <li class="nav-item">
+                            <a class="nav-link " data-toggle="pill" href="#nav-tab-card">
+                                <i class="ln ln-icon-Lock-2"></i>  Login</a></li>
                     </ul>
 
                     <div class="tab-content">
-                        <div class="tab-pane fade" id="nav-tab-card">
+                        <div class="tab-pane fade" id="nav-tab-paypal">
                             <p class="alert alert-success">Please fill the form below</p>
                             <form method="POST" action="{{ route('users.register') }}">
                                 @csrf
@@ -123,7 +120,7 @@
 
 
 
-                        <div class="tab-pane fade active show" id="nav-tab-paypal">
+                        <div class="tab-pane fade active show" id="nav-tab-card">
                             <p class="alert alert-success">Already have an account </p>
                             <form method="POST" action="{{ route('login') }}">
                                 @csrf

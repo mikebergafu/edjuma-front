@@ -29,128 +29,177 @@
 
     <!-- Container -->
     <div class="container">
+
         <div class="my-account">
-        <ul class="tabs-nav">
-            <li class=""><a href="{{route('login')}}">Login</a></li>
-            <li><a href="{{route('register')}}">Register</a></li>
-        </ul>
 
-        <div class="tabs-container">
-            <!-- Login -->
-            <div class="tab-content" id="tab1" style="display: none;">
-                <form method="POST" action="{{ route('login') }}">
-                    @csrf
+            <article class="card">
+                <div class=" p-5">
 
-                    <p class="form-row form-row-wide">
-                        <label for="username">Email:
-                            <i class="ln ln-icon-Male"></i>
-                            <input type="text" class="input-text" name="email" id="email" value="" />
-                        </label>
-                        @if ($errors->has('email'))
-                            <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                        @endif
-                    </p>
+                    <ul class="nav bg radius nav-pills nav-fill mb-3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="pill" href="#nav-tab-card">
+                                <i class="ln ln-icon-Male"></i> SignUp</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link active show" data-toggle="pill" href="#nav-tab-paypal">
+                                <i class="ln ln-icon-Lock-2"></i>  Login</a></li>
 
-                    <p class="form-row form-row-wide">
-                        <label for="password">Password:
-                            <i class="ln ln-icon-Lock-2"></i>
-                            <input class="input-text" type="password" name="password" id="password"/>
-                        </label>
-                        @if ($errors->has('password'))
-                            <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                        @endif
-                    </p>
+                    </ul>
 
-                    <p class="form-row">
-                        <input type="submit" class="button border fw margin-top-10" name="login" value="Login" />
-
-                        <label for="rememberme" class="rememberme">
-                            <input name="rememberme" type="checkbox" id="rememberme" value="forever" /> Remember Me</label>
-                    </p>
-
-                    <p class="lost_password">
-                        <a href="#" >Lost Your Password?</a>
-                    </p>
-
-                </form>
-            </div>
-
-            <!-- Register -->
-            <div class="tab-content padding-right" id="tab2" style="display: none;">
-                <form method="POST" action="{{ route('users.register') }}">
-                    @csrf
-                    <p class="form-row form-row-wide">
-                        <label for="first_name">First Name:
-                            <i class="ln ln-icon-Male"></i>
-                            <input type="text" class="input-text" name="first_name" id="first_name" value="" />
-                        </label>
-
-                        @if ($errors->has('first_name'))
-                            <span class="invalid-feedback">
+                    <div class="tab-content">
+                        <div class="tab-pane fade" id="nav-tab-card">
+                            <p class="alert alert-success">Please fill the form below</p>
+                            <form method="POST" action="{{ route('users.register') }}">
+                                @csrf
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <i class="ln ln-icon-Male"></i>
+                                        <label for="first_name">First Name:</label>
+                                        <input type="text" class="input-text" name="first_name" id="first_name" value="" required/>
+                                    </div>
+                                    @if ($errors->has('first_name'))
+                                        <span class="invalid-feedback">
                                         <strong>{{ $errors->first('first_name') }}</strong>
                                     </span>
-                        @endif
-                    </p>
-                    <p class="form-row form-row-wide">
-                        <label for="last_name">Last Name/Surname:
-                            <i class="ln ln-icon-Male"></i>
-                            <input type="text" class="input-text" name="last_name" id="last_name" value="" />
-                        </label>
+                                    @endif
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <i class="ln ln-icon-Male"></i>
+                                        <label for="last_name">Last Name:</label>
+                                        <input type="text" class="input-text" name="last_name" id="last_name" value=""  required/>
+                                    </div>
 
-                        @if ($errors->has('last_name'))
-                            <span class="invalid-feedback">
+                                    @if ($errors->has('last_name'))
+                                        <span class="invalid-feedback">
                                         <strong>{{ $errors->first('last_name') }}</strong>
                                     </span>
-                        @endif
-                    </p>
+                                    @endif
+                                </div>
 
-                    <p class="form-row form-row-wide">
-                        <label for="email2">Email Address:
-                            <i class="ln ln-icon-Mail"></i>
-                            <input type="text" class="input-text" name="email" id="email2" value="" />
-                        </label>
-                        @if ($errors->has('email'))
-                            <span class="invalid-feedback">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <i class="ln ln-icon-Mail"></i>
+                                        <label for="email2">Email Address:</label>
+                                        <input type="text" class="input-text" name="email" id="email" value="" required/>
+                                    </div>
+
+                                    @if ($errors->has('email'))
+                                        <span class="invalid-feedback">
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
-                        @endif
-                    </p>
+                                    @endif
+                                </div>
 
-                    <p class="form-row form-row-wide">
-                        <label for="password1">Password:
-                            <i class="ln ln-icon-Lock-2"></i>
-                            <input class="input-text" type="password" name="password1" id="password1"/>
-                        </label>
-                        @if ($errors->has('password'))
-                            <span class="invalid-feedback">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <i class="ln ln-icon-Lock-2"></i>
+                                        <label for="password1">Password:</label>
+                                        <input class="input-text" type="password" name="password" id="password1" required/>
+                                    </div>
+
+                                    @if ($errors->has('password'))
+                                        <span class="invalid-feedback">
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
-                        @endif
-                    </p>
+                                    @endif
+                                </div>
 
-                    <p class="form-row form-row-wide">
-                        <label for="password2">Repeat Password:
-                            <i class="ln ln-icon-Lock-2"></i>
-                            <input class="input-text" type="password" id="password-confirm" name="password_confirmation"/>
-                        </label>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <i class="ln ln-icon-Lock-2"></i>
+                                        <label for="password2">Repeat Password:</label>
+                                        <input class="input-text" type="password" id="password-confirm" name="password_confirmation" required/>
+                                    </div>
 
-                    </p>
+                                </div>
 
-                    <p class="form-row">
-                        <input type="submit" class="button border fw margin-top-10" name="register" value="Register" />
-                    </p>
+                                <p class="form-row">
+                                    <input type="submit" class="button border fw margin-top-10" name="register" value="Register" />
+                                </p>
 
-                </form>
-            </div>
+                            </form>
+                        </div> <!-- tab-pane.// -->
+
+
+
+
+                        <div class="tab-pane fade active show" id="nav-tab-paypal">
+                            <p class="alert alert-success">Already have an account </p>
+                            <form method="POST" action="{{ route('login') }}">
+                                @csrf
+
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <i class="ln ln-icon-Male"></i>
+                                        <label for="username">Email:</label>
+                                        <input type="text" class="input-text" name="email" id="email" value="" required/>
+                                    </div>
+
+                                    @if ($errors->has('email'))
+                                        <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <i class="ln ln-icon-Lock-2"></i>
+                                        <label for="password">Password:</label>
+                                        <input class="input-text" type="password" name="password" id="password"/>
+                                    </div>
+
+                                    @if ($errors->has('password'))
+                                        <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+
+                                <p class="form-row">
+                                    <input type="submit" class="button border fw margin-top-10" name="login" value="Login" />
+
+                                    <label for="rememberme" class="rememberme">
+                                        <input name="rememberme" type="checkbox" id="rememberme" value="forever" /> Remember Me</label>
+                                </p>
+
+                                <p class="lost_password">
+                                    <a href="#" >Lost Your Password?</a>
+                                </p>
+
+                            </form>
+                        </div>
+                    {{--<div class="tab-pane fade" id="nav-tab-bank">
+                        <p>Bank accaunt details</p>
+                        <dl class="param">
+                            <dt>BANK: </dt>
+                            <dd> THE WORLD BANK</dd>
+                        </dl>
+                        <dl class="param">
+                            <dt>Accaunt number: </dt>
+                            <dd> 12345678912345</dd>
+                        </dl>
+                        <dl class="param">
+                            <dt>IBAN: </dt>
+                            <dd> 123456789</dd>
+                        </dl>
+                        <p><strong>Note:</strong> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. </p>
+                    </div>--}} <!-- tab-pane.// -->
+                    </div> <!-- tab-content .// -->
+
+                </div> <!-- card-body.// -->
+            </article> <!-- card.// -->
+
+
+
+
+
+
+
+
 
         </div>
-
-        </div>
-
     </div>
 @endsection
 
