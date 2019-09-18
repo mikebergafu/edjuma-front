@@ -61,6 +61,7 @@ Route::post('jobs/edit/resume/{resume}/{uuid}', 'ResumeController@edit')->name('
 //Get Resume by applicant id
 Route::get('jobs/applicant/{user_id}/resumes/{uuid}', 'PosterController@getApplicantResume')->name('applicant.resumes');
 //Shortlists an applicant
+Route::get('jobs/applicant/checkshortlist/{job_id}/{applicant_id}', 'PosterController@setShortlist')->name('applicant.set.shortlist');
 Route::get('jobs/applicant/shortlist/{job_id}/{applicant_id}', 'PosterController@setShortlist')->name('applicant.set.shortlist');
 Route::get('jobs/applicant/get/shortlist/{job_id}', 'PosterController@getShortlist')->name('applicant.get.shortlist');
 Route::get('jobs/applicant/set/hired/{job_id}/{applicant_id}', 'PosterController@setHired')->name('applicant.set.hired');
@@ -78,6 +79,8 @@ Route::get('home/jobs/{uuid}', 'FreeViewController@index')->name('home.jobs');
 
 //Payment Test
 Route::get('edjuma/payment/test', 'PaymentControler@index')->name('pay.test');
+Route::get('edjuma/payment/makepayment', 'PaymentControler@makePayment')->name('pay.makepayment');
+Route::get('edjuma/payment/checkpayment', 'PaymentControler@checkPaymentStatus')->name('pay.checkpayment');
 Route::get('edjuma/image/test', 'ProController@showImage')->name('image.test');
 
 

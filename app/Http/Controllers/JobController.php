@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Payments;
 use App\Helpers\Sitso;
 use App\Job;
 use App\JobCategory;
 use App\MobileNetwork;
+use App\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -84,6 +86,9 @@ class JobController extends Controller
                 ->withInput();
 
         } else {
+
+            $pay_tran_id = substr(str_shuffle(str_repeat("0123456789", 5)), 0, $length = 12);
+
             $job =new Job();
             $job->job_title = $request->input('job_title');
             $job->job_category = $request->input('category');
@@ -94,41 +99,34 @@ class JobController extends Controller
             $job->number_of_staff = $request->input('number_of_staff');
             $job->salary = $request->input('salary');
             $job->salary_frequency = $request->input('salary_frequency');
-
             $job->created_by = Auth::user()->id;
             $job->update_by = Auth::user()->id;
-
+            $job->job_type = 0;
+            $job->owner_description = $pay_tran_id;
             $amount= Sitso::getPayable($job->salary,$job->salary_frequency,$job->number_of_staff,$job->job_starts,$job->job_ends);
             $salary_percent=Sitso::payablePercent($amount,4);
-
             $payable_amount=round($amount+$salary_percent,2);
-
             $phone_no=$request->input('mobile_no');
             $customer_name=DB::table('users')->where('id',Auth::user()->id)->select('first_name','last_name')->get();
-            $amount=$payable_amount;
+
             $desc="Payment for Posting a New Job";
             $network_code=$request->input('channel');
             $token="";
+            $job->save();
 
-            $this->makePayment($phone_no,$customer_name[0]->first_name." ".$customer_name[0]->last_name, $amount,$desc,$network_code,$token);
 
-            //Check if Payment Success is Stored
-            $pay_status="success";
+            $save_pay = new Payment();
+            $save_pay->user_id = Auth::user()->id;
+            $save_pay->transaction_id =$pay_tran_id;
+            $save_pay->amount =5;
+            $save_pay->status =0;
+            $save_pay->payment_type_id =1;
+            $save_pay->save();
 
-            if($pay_status=="success"){
-                $job->save();
-                $message='New Job Added';
-                Alert::success('Edjuma Jobs', $message);
-                $ret=redirect()->to('/');
-            }else{
-                $message='Unsuccessful Job Posting Process, Please Try Again';
-                Alert::danger('Edjuma Jobs', $message);
-                $ret=redirect()->back(200);
-            }
-
+            return Payments::payswitch_pay($pay_tran_id,1,Auth::user()->email);
         }
 
-        return $ret;
+        //return $ret;
     }
 
     /**

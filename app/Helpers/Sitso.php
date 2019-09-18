@@ -20,6 +20,16 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class Sitso
 {
+    public static function checkShortListing($job_id,$applicant_id){
+        $exists=DB::table('application_status')->where([['job_id',$job_id],['applicant_id',$applicant_id]])->get();
+
+        if(count($exists)>0){
+            $title='info';
+            $message='This Applicant Has Already been Shortlisted';
+        }else{
+
+        }
+    }
 
     public static function getPayable($salary, $frequency,$no_of_staff, $from_date,$to_date):float{
         $no_of_days=(strtotime($to_date)-strtotime($from_date))/86400;

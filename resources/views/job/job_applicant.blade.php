@@ -149,10 +149,9 @@
                     <!-- Footer -->
                     <div class="app-footer">
 
-                        <ul>
+                       <ul>
                             @if(\App\Helpers\Sitso::getShortlistStatus($my_applicant->job_id,$my_applicant->user_id)>0)
-                                <li><a style="color: #ececec;" href="{{route('applicant.set.shortlist',[$my_applicant->job_id,$my_applicant->user_id])}}"><i class="fa fa-user-plus"></i>Add to Shortlist</a></li>
-
+                                <li><a style="color: grey; pointer-events: none;" href="{{route('applicant.set.shortlist',[$my_applicant->job_id,$my_applicant->user_id])}}"><i class="fa fa-user-plus"></i>Add to Shortlist</a></li>
                             @else
                                 <li><a href="{{route('applicant.set.shortlist',[$my_applicant->job_id,$my_applicant->user_id])}}"><i class="fa fa-user-plus"></i>Add to Shortlist</a></li>
                             @endif

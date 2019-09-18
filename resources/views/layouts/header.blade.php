@@ -31,6 +31,8 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('edjuma/css/colors/green.css')}}" id="colors">
+    <link rel="stylesheet" href="{{asset('edjuma/css/colors/customestyle.css')}}">
+
 
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
    </head>

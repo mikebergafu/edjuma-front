@@ -122,10 +122,12 @@ class PosterController extends Controller
 
     public function getMyApplicants()
     {
-        $my_applicants=JobSeeker::get()->where('poster_id',Auth::user()->id);
+        $data['my_applicants']=JobSeeker::get()->where('poster_id',Auth::user()->id);
 
-        return view('poster/applicants/index', compact('my_applicants'));
+        return view('poster/applicants/index', $data);
     }
+
+
 
 
     public function getApplicantResume($user_id)
@@ -137,11 +139,13 @@ class PosterController extends Controller
     }
 
     public function getThisJobsApplicants($job_id){
-        $my_applicants=DB::table('job_seekers')->where('job_id',$job_id)->get();
+
+        $data['my_applicants']= DB::table('job_seekers')->where('job_id',$job_id)->get();
         $jobs=DB::table('jobs')->where('id',$job_id)->pluck('job_title');
-        $job=$jobs[0];
-        //return $job;
-        return view('job/job_applicant', compact('my_applicants',$my_applicants,'job',$job,'job_id'));
+        $data['job']=$jobs[0];
+        $data['job_id'] = $job_id;
+
+        return view('job/job_applicant', $data);
     }
 
     public function setShortlist($job_id,$applicant_id){
@@ -174,11 +178,12 @@ class PosterController extends Controller
     }
 
     public function getShortlist($job_id){
-        $my_applicants=DB::table('application_status')->where('job_id',$job_id)->get();
+        $data['my_applicants']=DB::table('application_status')->where('job_id',$job_id)->get();
+        $data['job_id'] =  $data['my_applicants'][0]->job_id;
         $jobs=DB::table('jobs')->where('id',$job_id)->pluck('job_title');
-        $job=$jobs[0];
+        $data['job']=$jobs[0];
         //return $job;
-        return view('poster/applicants/shortlisted', compact('my_applicants',$my_applicants,'job',$job,'job_id'));
+        return view('poster/applicants/shortlisted', $data);
     }
 
     public function setHired($job_id,$applicant_id){
