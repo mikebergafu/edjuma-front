@@ -54,7 +54,7 @@ class PaymentControler extends Controller
         $response = Payments::checkPaymentStatus($payswitch_tran_id);
          $result = $response['status'];
 
-        if ($result = "approved"){
+        if ($result == "approved"){
 
             //update Jobs -> job_type = 1, using Owners_description = $tran_id
             $payswitch_tran =  "$payswitch_tran_id";
@@ -99,7 +99,7 @@ class PaymentControler extends Controller
             $update_payment->status = 2;
             $update_payment->update();
 
-            Alert::danger('Edjuma Jobs', $resStatus);
+            Alert::info('Edjuma Jobs', $resStatus);
             return redirect()->to('/jobs/form');
         }
 

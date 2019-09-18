@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Application;
+use App\Events\AddJobAlert;
 use App\Job;
 use App\JobSeeker;
 use App\poster;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -199,11 +201,17 @@ class PosterController extends Controller
             $update=DB::table('application_status')->where([['job_id',$job_id],['applicant_id',$applicant_id]])->update($update_arr);
             //$update="";
             if($update){
+                $applicant = User::where('id',$applicant_id)->first();
+                $hired_job = Job::where('id',$job_id)->first();
+                $job_name = $hired_job->job_title;
+                $msg = 'You will receive a call from us soon';
+                $subject = 'Your have been hired for '.$job_name;
+                event(new AddJobAlert($applicant->email, $applicant->first_name,$subject,$msg));
                 $title='success';
                 $message='Applicant Successfully Hired';
             }else{
                 $title='error';
-                $message='An Error Occurred, Please Again in a Few Minutes';
+                $message='Applicant Already Hired For This Job';
             }
         }else{
             $title='info';
@@ -215,10 +223,11 @@ class PosterController extends Controller
     }
 
     public function getHired($job_id){
-        $my_applicants=DB::table('application_status')->where([['job_id',$job_id],['hired',1]])->get();
+        $data['job_id'] = $job_id;
+        $data['my_applicants']=DB::table('application_status')->where([['job_id',$job_id],['hired',1]])->get();
         $jobs=DB::table('jobs')->where('id',$job_id)->pluck('job_title');
-        $job=$jobs[0];
+        $data['job']=$jobs[0];
         //return $my_applicants;
-        return view('poster/applicants/hired', compact('my_applicants',$my_applicants,'job',$job,'job_id'));
+        return view('poster/applicants/hired', $data);
     }
 }

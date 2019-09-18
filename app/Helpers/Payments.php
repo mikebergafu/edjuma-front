@@ -35,8 +35,8 @@ class Payments
             "transaction_id"=>$tranid,
             "desc"=>"Deposit",
             "amount"=>$amountpay,
-            //"redirect_url"=>"https://5cb392b2.ngrok.io/edjuma/payment/checkpayment?check=".$tranid,
-            "redirect_url"=>"https://tbnglobal.org",
+            "redirect_url"=>"http://localhost:8000/edjuma/payment/checkpayment?check=".$tranid,
+            //"redirect_url"=>"https://tbnglobal.org",
             "email"=>$email
         ]);
 

@@ -145,12 +145,12 @@
                     <div class="app-footer">
 
                         <ul>
-                            <li><a href="{{route('applicant.set.hired',[$my_applicant->job_id,$my_applicant->applicant_id])}}"><i class="fa fa-user-plus"></i>Add to Hire</a></li>
+                            {{--<li><a href="{{route('applicant.set.hired',[$my_applicant->job_id,$my_applicant->applicant_id])}}"><i class="fa fa-user-plus"></i>Add to Hire</a></li>
                             @if(\App\Helpers\Sitso::getShortlistStatus($my_applicant->job_id,$my_applicant->applicant_id)>0)
                                 <li><a style="color: #ececec;" href="{{route('applicant.set.shortlist',[$my_applicant->job_id,$my_applicant->applicant_id])}}"><i class="fa fa-user-plus"></i>Add to Shortlist</a></li>
                             @else
                                 <li><a href="{{route('applicant.set.shortlist',[$my_applicant->job_id,$my_applicant->applicant_id])}}"><i class="fa fa-user-plus"></i>Add to Shortlist</a></li>
-                            @endif
+                            @endif--}}
                             <li><i class="fa fa-calendar"></i>{{ \Carbon\Carbon::parse($my_applicant->created_at)->toDayDateTimeString()}}</li>
                         </ul>
                         <div class="clearfix"></div>
