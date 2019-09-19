@@ -30,7 +30,7 @@ class HomeController extends Controller
         $jobs=DB::table('jobs')
             ->join('job_categories','jobs.job_category','job_categories.id')
             ->select('jobs.id','job_title','job_description','job_starts','job_ends','salary','salary_frequency',
-                'job_categories.name','jobs.created_at','job_location')
+                'job_categories.name','jobs.created_at','job_location','job_category')
             ->paginate(5);
 
         //return $jobs;

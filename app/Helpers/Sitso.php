@@ -183,4 +183,9 @@ class Sitso
     }
 
 
+    public static function getCategoryIcon($category_id){
+       return DB::table('job_categories')->where('id', $category_id)->first()->icon;
+    }
+
+
 }

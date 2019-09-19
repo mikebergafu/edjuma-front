@@ -5,7 +5,7 @@
 @section('content')
     <!-- Titlebar
 ================================================== -->
-    <div id="titlebar">
+    <div id="titlebar" style="background-image: url('{{asset('edjuma/images/bg/banner-bg.png')}}')">
         <div class="container">
             <div class="ten columns">
                 <span>We found {{count($jobs)}} jobs matching:</span>
@@ -29,39 +29,29 @@
                 <div class="padding-right">
 
                     <div class="listings-container">
-                    @foreach($jobs as $job)
+                        @foreach($jobs as $job)
                         <!-- Listing -->
-                            @if($job->name=="Ground & Landscaping")
-                                <a href="{{route('jobs.apply.form',$job->id)}}" data-confirm="Click OK to Continue with Job Application " id="confirm" class="confirm listing internship">
-                                    @elseif($job->name=="Vehicle Maintenance")
-                                        <a href="{{route('jobs.apply.form',$job->id)}}" data-confirm="Click OK to Continue with Job Application " id="confirm" class="confirm listing full-time">
-                                            @elseif($job->name=="Web, Software & IT")
-                                                <a href="{{route('jobs.apply.form',$job->id)}}" data-confirm="Click OK to Continue with Job Application " id="confirm" class="confirm listing freelance">
-                                                    @else
-                                                        <a href="{{route('jobs.apply.form',$job->id)}}" data-confirm="Click OK to Continue with Job Application " id="confirm" class="confirm listing part-time">
-                                                            @endif
+                                   <a href="{{route('jobs.apply.form',$job->id)}}" style="text-decoration: none;" data-confirm="Click OK to Continue with Job Application " id="confirm" class="confirm listing part-time">
+                                        <div class="listing-logo">
+                                           {{-- <img src="{{asset('edjuma/images/job-list-logo-04.png')}}" alt="">--}}
+                                            <i style="font-size: 50px; font-weight: bold;" class="ln ln-icon-{{\App\Helpers\Sitso::getCategoryIcon($job->job_category)}}  text-success"></i>
+                                        </div>
+                                        <div class="listing-title">
+                                            <h4 style="font-weight: bolder;" >{{$job->job_title}}
+                                                <div class="clearfix"></div>
+                                                <small>Category: </small><small style="color: #26ae61">{{$job->name}} </small>
+                                            </h4>
+                                            <h6 class="text-dark" >{{$job->job_description}}</h6>
+                                            <ul class="listing-icons">
+                                                <li><i class="ln ln-icon-Map2"></i>{{$job->job_location}}</li>
+                                                <li><i class="ln ln-icon-Money-2"></i> {{$job->salary."/".$job->salary_frequency}}</li>
+                                                <li><div class="listing-date">{{\Carbon\Carbon::parse($job->created_at)->diffForHumans()}}</div></li>
+                                                <li><div class="listing-date new">Apply Now</div></li>
+                                            </ul>
+                                        </div>
+                                    </a>
 
-                                                            <div class="listing-logo">
-                                                                <img src="{{asset('edjuma/images/job-list-logo-04.png')}}" alt="">
-                                                            </div>
-                                                            <div class="listing-title">
-                                                                <h4>{{$job->job_title}}
-                                                                    <div class="clearfix"></div>
-                                                                    <small>Category: </small><small style="color: #26ae61">{{$job->name}} </small>
-                                                                </h4>
-                                                                <h6>{{$job->job_description}}</h6>
-                                                                <ul class="listing-icons">
-                                                                    <li><i class="ln ln-icon-Map2"></i>{{$job->job_location}}</li>
-                                                                    <li><i class="ln ln-icon-Money-2"></i> {{$job->salary."/".$job->salary_frequency}}</li>
-                                                                    <li><div class="listing-date">{{\Carbon\Carbon::parse($job->created_at)->diffForHumans()}}</div></li>
-                                                                    <li><div class="listing-date new">Apply Now</div></li>
-                                                                </ul>
-                                                            </div>
-                                                        </a>
-
-
-
-                                @endforeach
+                        @endforeach
                     </div>
                     <div class="clearfix"></div>
                     <div class="pagination-container">

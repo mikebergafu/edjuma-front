@@ -30,11 +30,10 @@
     <link href="{{asset('vendor/datatables/dataTables.bootstrap4.css')}}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}" defer></script>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{asset('edjuma/css/colors/green.css')}}" id="colors">
-    <link rel="stylesheet" href="{{asset('edjuma/css/colors/customestyle.css')}}">
+    {{--<link rel="stylesheet" href="{{asset('edjuma/css/colors/green.css')}}" id="colors">
+    <link rel="stylesheet" href="{{asset('edjuma/css/colors/customestyle.css')}}">--}}
 
 
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
    </head>
 
 <body>
@@ -154,7 +153,7 @@
 {{--@yield('scripts')--}}
 <script src="{{asset('vendor/datatables/jquery.dataTables.js')}}"></script>
 <script src="{{asset('vendor/datatables/dataTables.bootstrap4.js')}}"></script>
-<script src="{{asset('vendor/datatables/bergyDTController.min.js')}}"></script>
+
 <script>
     $('#start_date').click(function() {
         $('#modelWindow').modal('show');
@@ -171,7 +170,7 @@
 
 <script>
     // A $( document ).ready() block.
-    $( document ).ready(function() {
+    /*$( document ).ready(function() {
         var url = "https://webhook.site/51a071d4-09fa-4d06-923a-e1563c0deecd";
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -182,7 +181,7 @@
         };
         xhttp.open("POST", url, true);
         xhttp.send();
-    });
+    });*/
 </script>
 
 
