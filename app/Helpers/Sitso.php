@@ -187,5 +187,33 @@ class Sitso
        return DB::table('job_categories')->where('id', $category_id)->first()->icon;
     }
 
+    public static function getMinPx(){
+        return Job::orderBy('salary', 'ASC')->first()->salary;
+    }
+
+    public static function getMaxPx(){
+        return Job::orderBy('salary', 'DESC')->first()->salary;
+    }
+
+    public static function getPriceSteps(){
+        $counter =0;
+        for ($i =0; $i <= self::getMaxPx();$i=2*($i+self::getMinPx())) {
+          if($counter < 1 ){
+              echo "<li>
+                            <input id='check-9' type='checkbox' name='check' value='check-9'>
+                            <label for='check-9'> GH₵ " . $i . "-" . self::getMinPx() . " <span>(78)</span></label>
+                        </li>";
+          }else{
+              $min= ($i/2) +1;
+              echo "<li>
+                            <input id='check-9' type='checkbox' name='check' value='check-9'>
+                            <label for='check-9'> GH₵ " .$min. "-" . $i . " <span>(78)</span></label>
+                        </li>";
+          }
+          $counter++;
+        }
+
+    }
+
 
 }

@@ -72,6 +72,9 @@
                         <a href="{{route('image.test')}}">Show</a>
 
                     </form>
+
+
+
                 </div>
 
                 <!-- Register -->
@@ -150,6 +153,7 @@
 @endsection
 
 @section('scripts')
+
     <script src="{{asset('vendor/datatables/jquery.dataTables.js')}}"></script>
     <script src="{{asset('vendor/datatables/dataTables.bootstrap4.js')}}"></script>
     <script src="{{asset('vendor/datatables/bergyDTController.min.js')}}"></script>
@@ -170,4 +174,18 @@
             }
         }
     </script>
+
+
+    <script>
+        $(document).ready(function() {
+            $(".add").click(function() {
+                $('<div><input class="files" name="user_files[]" type="file" ><span class="rem" ><a href="javascript:void(0);" >Remove</span></div>').appendTo(".contents");
+            });
+            $('.contents').on('click', '.rem', function() {
+                $(this).parent("div").remove();
+            });
+
+        });
+    </script>
+
 @endsection
