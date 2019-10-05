@@ -27,7 +27,6 @@ class SendPayEmail
      */
     public function handle(AddJobAlert $event)
     {
-        //Log::info('TESTEVENT',['email' => $event->user_mail]);
         $sendemail = new AlertController();
         $sendemail->sendmail($event->user_mail,$event->user_name,$event->subject,$event->msg);
     }

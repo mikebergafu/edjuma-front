@@ -17,6 +17,8 @@ header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Autho
 */
 
 Route::get('/', 'WelcomeController@index')->name('welcome');
+Route::post('/search', 'WelcomeController@search')->name('search');
+
 
 Auth::routes();
 

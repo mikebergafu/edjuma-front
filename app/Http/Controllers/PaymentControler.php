@@ -82,9 +82,6 @@ class PaymentControler extends Controller
             \event(new AddJobAlert($user_mail,$user_name,$subject,$msg));
 
 
-            /*$sendemail = new AlertController();
-            $sendemail->sendmail($user_mail,$user_name,'Payment Successfull',$msg);*/
-
 
             //return $response['status'];
             Alert::success('Edjuma Jobs', 'Payment Successfull');

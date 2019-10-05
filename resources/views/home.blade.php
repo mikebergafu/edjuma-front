@@ -49,8 +49,7 @@
                                                 <li><div class="listing-date new">Apply Now</div></li>
                                             </ul>
                                         </div>
-                                    </a>
-
+                                   </a>
                         @endforeach
                     </div>
                     <div class="clearfix"></div>

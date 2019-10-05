@@ -172,21 +172,7 @@
     })
 </script>
 
-<script>
-    // A $( document ).ready() block.
-    /*$( document ).ready(function() {
-        var url = "https://webhook.site/51a071d4-09fa-4d06-923a-e1563c0deecd";
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                // Typical action to be performed when the document is ready:
-                alert(xhttp.responseText);
-            }
-        };
-        xhttp.open("POST", url, true);
-        xhttp.send();
-    });*/
-</script>
+
 
 
 

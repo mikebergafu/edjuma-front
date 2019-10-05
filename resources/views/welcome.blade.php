@@ -2,6 +2,9 @@
 @section('title')
     Manage Jobs - Edjuma.com
 @endsection
+<style>
+
+</style>
 
 {{--@section('styles')
     <link href="{{asset('vendor/datatables/dataTables.bootstrap4.css')}}" rel="stylesheet">
@@ -13,37 +16,71 @@
 
 
 
-
-
-<!-- Banner
-    ================================================== -->
     <div id="banner" class="with-transparent-header parallax background" style="background-image: url(./edjuma/images/banner-home.jpg)" data-img-width="2000" data-img-height="1330" data-diff="300">
         <div class="container">
             <div class="sixteen columns">
 
-                <div class="search-container">
+                <div style="margin-top: -150px;" class="search-container">
 
                     <!-- Form -->
                     <h2>Find Job</h2>
-                    <input type="text" class="ico-01" placeholder="job title, keywords or company name" value=""/>
-                    <input type="text" class="ico-02" placeholder="city, province or region" value=""/>
-                    <button><i class="fa fa-search"></i></button>
+
+                    <input type="text" id="job_title" name="job_title" class="ico-01" placeholder="job title, keywords or company name" value="" required/>
+                    <input type="text" id="job_city" name="job_city" class="ico-02" placeholder="city, province or region" value="" required/>
+                    <button id="search-job"><i class="fa fa-search"></i></button>
 
                     <!-- Browse Jobs -->
                     <div class="browse-jobs">
                         Browse job offers by <a href="browse-categories.html"> category</a> or <a href="#">location</a>
                     </div>
-
-                    <!-- Announce -->
-                    <!-- 				<div class="announce">
-                                        We’ve over <strong>15 000</strong> job offers for you!
-                                    </div> -->
-
                 </div>
 
+                <section style="margin-top: -130px;">
+                    <div class="row">
+                        <div class="listings-container">
+
+                            @if(count($jobs1)>0)
+                                @foreach($jobs1 as $job)
+                                    <a  href="{{route('jobs.apply.form',$job->id)}}" style=" text-decoration: none;" data-confirm="Click OK to Continue with Job Application " id="confirm" class="boxshadow confirm listing part-time bg-white">
+                                        <div class="listing-logo">
+                                            {{-- <img src="{{asset('edjuma/images/job-list-logo-04.png')}}" alt="">--}}
+                                            <i style="font-size: 50px; font-weight: bold;" class="ln ln-icon-}}  text-success"></i>
+                                        </div>
+                                        <div class="listing-title">
+                                            <h4 style="font-weight: bolder;" >{{$job->job_title}}
+                                                <div class="clearfix"></div>
+                                                <small>Category: </small><small style="color: #26ae61">{{$job->name}} </small>
+                                            </h4>
+                                            <h6 class="text-dark" >{{$job->job_description}}</h6>
+                                            <ul class="listing-icons">
+                                                <li><i class="ln ln-icon-Map2"></i>{{$job->job_location}}</li>
+                                                <li><i class="ln ln-icon-Money-2"></i> {{$job->salary."/".$job->salary_frequency}}</li>
+                                                <li><div class="listing-date">{{\Carbon\Carbon::parse($job->created_at)->diffForHumans()}}</div></li>
+                                                <li><div class="listing-date new">Apply Now</div></li>
+                                            </ul>
+                                        </div>
+                                    </a>
+                                @endforeach
+                                    {{$jobs1->links()}}
+                            @endif
+                        </div>
+
+                        <div class="listings-container">
+                            <div id="show_result">
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
             </div>
+
         </div>
     </div>
+
 
 
     <!-- Content
@@ -359,6 +396,41 @@
         </div>
 
     </div>
+
+    <script>
+        $(document).ready(function () {
+
+            $(document).on('click','#search-job',function (e) {
+                //console.log(job_title,job_city);
+                var job_title = $("#job_title").val();
+                var job_city = $("#job_city").val();
+
+                var token = "{{csrf_token()}}";
+
+                $.ajax({
+                    type: "POST",
+                    url:"{{route('search')}}",
+                    data:{
+                        'job_title': job_title ,
+                        'job_city': job_city ,
+                        '_token' : token
+                    },
+                    success:function(data){
+                        //console.log(data);
+                        $("#show_result").html(data);
+                    }
+                });
+
+            });
+
+
+
+
+
+        });
+
+    </script>
+
 
 
 
