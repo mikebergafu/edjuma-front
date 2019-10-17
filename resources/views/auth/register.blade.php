@@ -35,18 +35,20 @@
                     <ul class="nav bg radius nav-pills nav-fill mb-3" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active show" data-toggle="pill" href="#nav-tab-paypal">
-                                <i class="ln ln-icon-Male"></i> SignUp</a></li>
+                                <i class="ln ln-icon-Male"></i> Personal</a></li>
 
                         <li class="nav-item">
                             <a class="nav-link " data-toggle="pill" href="#nav-tab-card">
-                                <i class="ln ln-icon-Lock-2"></i>  Login</a></li>
+                                <i class="ln ln-icon-Bag"></i>  Company</a></li>
                     </ul>
 
                     <div class="tab-content">
-                        <div class="tab-pane fade" id="nav-tab-paypal">
-                            <p class="alert alert-success">Please fill the form below</p>
+                        <div class="tab-pane fade active show" id="nav-tab-paypal">
+                            <p class="alert alert-success">Create Your Personal Account</p>
                             <form method="POST" action="{{ route('users.register') }}">
                                 @csrf
+
+                                <input name="account_type" value="1" hidden/>
                                 <div class="form-group">
                                     <div class="form-group">
                                     <i class="ln ln-icon-Male"></i>
@@ -120,7 +122,84 @@
 
 
 
+
                         <div class="tab-pane fade active show" id="nav-tab-card">
+                            <p class="alert alert-success">SignUp A Business Account</p>
+                            <form method="POST" action="{{ route('users.register') }}">
+                                @csrf
+                                <input name="account_type" value="2" hidden/>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <i class="ln ln-icon-Male"></i>
+                                        <label for="first_name">Name Of Business:</label>
+                                        <input type="text" class="input-text" name="first_name" id="first_name" value="" required/>
+                                    </div>
+                                    @if ($errors->has('first_name'))
+                                        <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('first_name') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <i class="ln ln-icon-Location"></i>
+                                        <label for="last_name">Location:</label>
+                                        <input type="text" class="input-text" name="last_name" id="last_name" value=""  required/>
+                                    </div>
+
+                                    @if ($errors->has('last_name'))
+                                        <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('last_name') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <i class="ln ln-icon-Mail"></i>
+                                        <label for="email2">Email Address:</label>
+                                        <input type="text" class="input-text" name="email" id="email" value="" required/>
+                                    </div>
+
+                                    @if ($errors->has('email'))
+                                        <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <i class="ln ln-icon-Lock-2"></i>
+                                        <label for="password1">Password:</label>
+                                        <input class="input-text" type="password" name="password" id="password1" required/>
+                                    </div>
+
+                                    @if ($errors->has('password'))
+                                        <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <i class="ln ln-icon-Lock-2"></i>
+                                        <label for="password2">Repeat Password:</label>
+                                        <input class="input-text" type="password" id="password-confirm" name="password_confirmation" required/>
+                                    </div>
+
+                                </div>
+
+                                <p class="form-row">
+                                    <input type="submit" class="button border fw margin-top-10" name="register" value="Register" />
+                                </p>
+
+                            </form>
+                        </div>
+
+
+                        {{--<div class="tab-pane fade show " id="nav-tab-card">
                             <p class="alert alert-success">Already have an account </p>
                             <form method="POST" action="{{ route('login') }}">
                                 @csrf
@@ -165,24 +244,8 @@
                                 </p>
 
                             </form>
-                        </div>
-                        {{--<div class="tab-pane fade" id="nav-tab-bank">
-                            <p>Bank accaunt details</p>
-                            <dl class="param">
-                                <dt>BANK: </dt>
-                                <dd> THE WORLD BANK</dd>
-                            </dl>
-                            <dl class="param">
-                                <dt>Accaunt number: </dt>
-                                <dd> 12345678912345</dd>
-                            </dl>
-                            <dl class="param">
-                                <dt>IBAN: </dt>
-                                <dd> 123456789</dd>
-                            </dl>
-                            <p><strong>Note:</strong> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua. </p>
-                        </div>--}} <!-- tab-pane.// -->
+                        </div>--}}
+
                     </div> <!-- tab-content .// -->
 
                 </div> <!-- card-body.// -->
