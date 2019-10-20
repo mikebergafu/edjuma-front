@@ -2,231 +2,400 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Payments;
-use App\Helpers\Sitso;
+use App\Category;
+use App\Country;
+use App\FlagJob;
 use App\Job;
-use App\JobCategory;
-use App\MobileNetwork;
-use App\Payment;
+use App\JobApplication;
+use App\Mail\ShareByEMail;
+use App\State;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use OVAC\HubtelPayment\Exception\HubtelException;
-use OVAC\LaravelHubtelPayment\Facades\HubtelPayment;
-use RealRashid\SweetAlert\Facades\Alert;
+use Mockery\Exception;
 
 class JobController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    public function newJob(){
+        $title = __('app.post_new_job');
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-
-        $jobs=DB::table('jobs')
-            ->where('created_by',Auth::user()->id)
-            ->orderBy('created_at','DESC')
-            ->get();
-
-        return view('job/index', compact('jobs'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $job_categories=JobCategory::all();
-        $networks=MobileNetwork::all();
-        return view('job/create', compact('job_categories',$job_categories,'networks'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //return $request->all();
-        $validator = Validator::make($request->all(), [
-            'job_title' => 'required|string|max:50',
-            /*'category' => 'required|string|max:50',
-            'job_description' => 'required|string|max:250',
-            'job_starts' => 'required|date|max:10',
-            'job_ends' => 'required|date|max:10',
-            'job_location' => 'required|string|max:50',
-            'number_of_staff' => 'required|integer',
-            'salary' => 'required|string|max:10',
-            'salary_frequency' => 'required|string|max:20',*/
-
-            //'mobile_no' => 'required|string|max:15',
-            //'channel' => 'required|string|max:20',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-
-        } else {
-
-            $pay_tran_id = substr(str_shuffle(str_repeat("0123456789", 5)), 0, $length = 12);
-
-            $job =new Job();
-            $job->job_title = $request->input('job_title');
-            $job->job_category = $request->input('category');
-            $job->job_location = $request->input('job_location');
-            $job->job_description = $request->input('job_description');
-            $job->job_starts = $request->input('job_starts');
-            $job->job_ends = $request->input('job_ends');
-            $job->number_of_staff = $request->input('number_of_staff');
-            $job->salary = $request->input('salary');
-            $job->salary_frequency = $request->input('salary_frequency');
-            $job->created_by = Auth::user()->id;
-            $job->update_by = Auth::user()->id;
-            $job->job_type = 0;
-            $job->owner_description = $pay_tran_id;
-            $amount= Sitso::getPayable($job->salary,$job->salary_frequency,$job->number_of_staff,$job->job_starts,$job->job_ends);
-            $salary_percent=Sitso::payablePercent($amount,4);
-            $payable_amount=round($amount+$salary_percent,2);
-            $phone_no=$request->input('mobile_no');
-            $customer_name=DB::table('users')->where('id',Auth::user()->id)->select('first_name','last_name')->get();
-
-            $desc="Payment for Posting a New Job";
-            $network_code=$request->input('channel');
-            $token="";
-            $job->save();
-
-
-            $save_pay = new Payment();
-            $save_pay->user_id = Auth::user()->id;
-            $save_pay->transaction_id =$pay_tran_id;
-            $save_pay->amount =5;
-            $save_pay->status =0;
-            $save_pay->payment_type_id =1;
-            $save_pay->save();
-
-            return Payments::payswitch_pay($pay_tran_id,1,Auth::user()->email);
+        $categories = Category::orderBy('category_name', 'asc')->get();
+        $countries = Country::all();
+        $old_country = false;
+        if (old('country')){
+            $old_country = Country::find(old('country'));
         }
 
-        //return $ret;
+        return view('admin.post-new-job', compact('title', 'categories','countries', 'old_country'));
+    }
+
+
+    public function newJobPost(Request $request){
+        $user_id = Auth::user()->id;
+
+        $rules = [
+            'job_title' => ['required', 'string', 'max:190'],
+            'position' => ['required', 'string', 'max:190'],
+            'category' => 'required',
+            'description' => 'required',
+            'deadline' => 'required',
+        ];
+        $this->validate($request, $rules);
+
+        $job_title = $request->job_title;
+        $job_slug = unique_slug($job_title, 'Job', 'job_slug');
+
+
+        $country = Country::find($request->country);
+        $state_name = null;
+        if ($request->state){
+            $state = State::find($request->state);
+            $state_name = $state->state_name;
+        }
+
+        $job_id = strtoupper(str_random(8));
+        $data = [
+            'user_id'                   => $user_id,
+            'job_title'                 => $job_title,
+            'job_slug'                  => $job_slug,
+            'position'                  => $request->position,
+            'category_id'               => $request->category,
+            'is_any_where'              => $request->is_any_where,
+            'salary'                    => $request->salary,
+            'salary_upto'               => $request->salary_upto,
+            'is_negotiable'             => $request->is_negotiable,
+            'salary_currency'           => $request->salary_currency,
+            'salary_cycle'              => $request->salary_cycle,
+            'vacancy'                   => $request->vacancy,
+            'gender'                    => $request->gender,
+            'exp_level'                 => $request->exp_level,
+            'job_type'                => $request->job_type,
+
+            'experience_required_years' => $request->experience_required_years,
+            'experience_plus'           => $request->experience_plus,
+            'description'               => $request->description,
+            'skills'                    => $request->skills,
+            'responsibilities'          => $request->responsibilities,
+            'educational_requirements'  => $request->educational_requirements,
+            'experience_requirements'   => $request->experience_requirements,
+            'additional_requirements'   => $request->additional_requirements,
+            'benefits'                  => $request->benefits,
+            'apply_instruction'         => $request->apply_instruction,
+            'country_id'                => $request->country,
+            'country_name'              => $country->country_name,
+            'state_id'                  => $request->state,
+            'state_name'                => $state_name,
+            'city_name'                 => $request->city_name,
+            'deadline'                  => $request->deadline,
+            'status'                    => 0,
+            'is_premium'                => $request->is_premium,
+        ];
+
+
+        $job = Job::create($data);
+        if ( ! $job){
+            return back()->with('error', 'app.something_went_wrong')->withInput($request->input());
+        }
+
+        $job->update(['job_id' => $job->id.$job_id]);
+        return redirect(route('posted_jobs'))->with('success', __('app.job_posted_success'));
+    }
+
+
+    public function postedJobs(){
+        $title = __('app.posted_jobs');
+        $user = Auth::user();
+        $jobs = $user->jobs()->paginate(20);
+
+        return view('admin.jobs', compact('title', 'jobs','user'));
+    }
+
+    public function edit($id){
+        $title = __('app.edit_job');
+        $job = Job::find($id);
+
+        $user = Auth::user();
+        if ( ! $user->is_admin() && $user->id != $job->user_id ){
+            return redirect(route('dashboard'))->with('error', trans('app.access_restricted'));
+        }
+
+        $categories = Category::orderBy('category_name', 'asc')->get();
+        $countries = Country::all();
+        $old_country = false;
+        if ($job->country_id){
+            $old_country = Country::find($job->country_id);
+        }
+
+        return view('admin.edit-job', compact('title', 'job','categories','countries', 'old_country'));
     }
 
     /**
-     * Display the specified resource.
+     * @param null $slug
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      *
-     * @param  \App\job  $job
-     * @return \Illuminate\Http\Response
+     * View any single page
      */
-    public function show(job $job)
-    {
-        //
+    public function view($slug = null){
+        $job = Job::whereJobSlug($slug)->first();
+
+        if ( ! $slug || ! $job || (! $job->is_active() && ! $job->can_edit()) ){
+            abort(404);
+        }
+
+        $title = $job->job_title;
+        return view('job-view', compact('title', 'job'));
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\job  $job
-     * @return \Illuminate\Http\Response
+     * Apply to job
      */
-    public function edit(job $job)
-    {
-        //
-    }
+    public function applyJob(Request $request){
+        $rules = [
+            'name'              => 'required',
+            'email'             => 'required',
+            'phone_number'      => 'required',
+            'message'           => 'required',
+            'resume'            => 'required',
+        ];
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\job  $job
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, job $job)
-    {
-        //
-    }
+        $validator = Validator::make($request->all(), $rules);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\job  $job
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(job $job)
-    {
-        //
-    }
+        $user_id = 0;
+        if (Auth::check()){
+            $user_id = Auth::user()->id;
+        }
 
-    public function getJobsByCategory($category_id){
-        $job_categories=JobCategory::all();
-        $jobs=DB::table('jobs')->where('job_category',$category_id)
-            ->join('job_categories','jobs.job_category','job_categories.id')
-            ->select('jobs.id','job_title','job_description','job_starts','job_ends','salary','salary_frequency',
-                'job_categories.name','jobs.created_at','job_location')
-            ->get();
-        //return $jobs;
-        return view('home', compact('jobs',$jobs,'job_categories'));
-    }
+        session()->flash('job_validation_fails', true);
 
-    public function makePayment($phone_no,$customer_name, $amount,$desc,$network_code,$token=""){
-        try {
-            // NOTE: The phone number must be of type string as Laravel considers all numbers with a leading 0 to be a hex number.
-            $payment = HubtelPayment::ReceiveMoney()
-                ->from($phone_no)//- The phone number to send the prompt to.
-                ->amount($amount)//- The exact amount value of the transaction
-                ->description($desc)//- Description of the transaction.
-                ->customerName($customer_name)//- Name of the person making the payment.callback after payment.
-                ->channel($network_code)//- The mobile network Channel.configuration
-                ->token($token)//- The mobile network Channel.configuration
-                ->run();
+        if ($validator->fails()){
+            return redirect()->back()->withInput($request->input())->withErrors($validator);
+        }
 
-            if ($payment) {
-                //return response()->json($payment, 200);
-                Alert::info('Edjuma Jobs', 'Payment is being Processed...');
-            } else {
-
-                throw new HubtelException();
+        if ($request->hasFile('resume')){
+            $image = $request->file('resume');
+            $valid_extensions = ['pdf','doc','docx'];
+            if ( ! in_array(strtolower($image->getClientOriginalExtension()), $valid_extensions) ){
+                session()->flash('job_validation_fails', true);
+                return redirect()->back()->withInput($request->input())->with('error', trans('app.resume_file_type_allowed_msg') ) ;
             }
 
-        }
-        catch (HubtelException $e) {
+            $file_base_name = str_replace('.'.$image->getClientOriginalExtension(), '', $image->getClientOriginalName());
 
-            $error=array(
-                'code'=>$e->getCode(),
-                'message'=>$e->getMessage()
-            );
-            Alert::info('Edjuma Jobs', $e->getMessage());
+            $image_name = strtolower(time().str_random(5).'-'.str_slug($file_base_name)).'.' . $image->getClientOriginalExtension();
+
+            $imageFileName = 'uploads/resume/'.$image_name;
+            try{
+                //Upload original image
+                Storage::disk('public')->put($imageFileName, file_get_contents($image));
+
+                $job = Job::find($request->job_id);
+
+                $application_data = [
+                    'job_id'                => $request->job_id,
+                    'employer_id'           => $job->user_id,
+                    'user_id'               => $user_id,
+                    'name'                  => $request->name,
+                    'email'                 => $request->email,
+                    'phone_number'          => $request->phone_number,
+                    'message'               => $request->message,
+                    'resume'                => $image_name,
+                ];
+                JobApplication::create($application_data);
+
+                session()->forget('job_validation_fails');
+                return redirect()->back()->withInput($request->input())->with('success', trans('app.job_applied_success_msg')) ;
+
+            } catch (\Exception $e){
+                return redirect()->back()->withInput($request->input())->with('error', $e->getMessage()) ;
+            }
         }
 
+        return redirect()->back()->withInput($request->input())->with('error', trans('app.error_msg')) ;
     }
 
-    public function getMyJobs(){
-        $my_jobs=DB::table('job_seekers')->where('created_by',Auth::user()->id)->paginate(4);
-        return view('job/applied_jobs', compact('my_jobs'));
-        //return $my_jobs;
+    public function flagJob(Request $request, $id){
+        $rules = [
+            'reason'              => 'required',
+            'email'             => 'required',
+            'message'           => 'required',
+        ];
 
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()){
+            session()->flash('flag_job_validation_fails', true);
+            return redirect()->back()->withInput($request->input())->withErrors($validator);
+        }
+
+        $data = [
+            'job_id'    => $id,
+            'reason'    => $request->reason,
+            'email'     => $request->email,
+            'message'   => $request->message,
+        ];
+        FlagJob::create($data);
+
+        return redirect()->back()->with('success', __('app.job_flag_submitted'));
     }
 
-    /*public function getApplicantResume(){
-        $my_jobs=DB::table('job_seekers')->where('created_by',Auth::user()->id)->get();
-        return view('job/applied_jobs', compact('my_jobs'));
-        //return $my_jobs;
-    }*/
+    public function pendingJobs(){
+        $title = __('app.pending_jobs');
+        $jobs = Job::pending()->orderBy('id', 'desc')->paginate(20);
+        return view('admin.jobs', compact('title', 'jobs'));
+    }
+    public function approvedJobs(){
+        $title = __('app.approved_jobs');
+        $jobs = Job::approved()->orderBy('id', 'desc')->paginate(20);
+        return view('admin.jobs', compact('title', 'jobs'));
+    }
+    public function blockedJobs(){
+        $title = __('app.approved_jobs');
+        $jobs = Job::blocked()->orderBy('id', 'desc')->paginate(20);
+        return view('admin.jobs', compact('title', 'jobs'));
+    }
+
+    public function flaggedMessage(){
+        $title = __('app.flagged_jobs');
+        $flagged = FlagJob::orderBy('id', 'desc')->paginate(20);
+        return view('admin.flagged_jobs', compact('title', 'flagged'));
+    }
+
+
+    /**
+     * @param $job_id
+     * @param $status
+     * @return \Illuminate\Http\RedirectResponse
+     *
+     * Change the job status
+     */
+    public function statusChange($job_id, $status){
+        $job = Job::find($job_id);
+        if (! $job->can_edit()){
+            return back()->with('error', __('app.permission_denied'));
+        }
+
+        if ($status === 'approve'){
+            $job->status = 1;
+            $job->save();
+        }elseif ($status === 'block'){
+            $job->status = 2;
+            $job->save();
+        }elseif($status === 'delete'){
+            //
+        }elseif($status === 'premium'){
+            $balance = $job->employer->premium_jobs_balance;
+            if ( ! $balance){
+                return back()->with('error', "You don't have any premium jobs balance");
+            }
+            $job->is_premium = 1;
+            $job->save();
+            $job->employer->checkJobBalace();
+        }
+
+        return back()->with('success', __('app.success'));
+    }
+
+    public function jobApplicants($job_id){
+        $job = Job::find($job_id);
+
+        $title = __('app.applicants')." For ({$job->job_title})";
+        $applications = JobApplication::whereJobId($job_id)->orderBy('id', 'desc')->paginate(20);
+
+        return view('admin.applicants', compact('title', 'applications'));
+    }
+
+    public function jobsByEmployer($company_slug = null){
+        if ( ! $company_slug){
+            abort(404);
+        }
+
+        $employer = User::whereCompanySlug($company_slug)->first();
+        if ( ! $employer){
+            abort(404);
+        }
+
+        $title = "Jobs by ".$employer->company_name;
+
+        return view('jobs-by-employer', compact('title', 'employer'));
+    }
+
+
+    public function shareByEmail(Request $request){
+        $rules = [
+            'receiver_name'     => 'required',
+            'receiver_email'    => 'email|required',
+            'your_name'         => 'required',
+            'your_email'        => 'email|required',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()){
+            session()->flash('share_job_validation_fails', true);
+            return redirect()->back()->withInput($request->input())->withErrors($validator);
+        }
+
+        try{
+            Mail::send(new ShareByEMail($request));
+        }catch (\Exception $e){
+            return back()->with('error', $e->getMessage());
+        }
+
+        return back()->with('success', __('app.job_shared_email_msg'));
+    }
+
+    public function jobsListing(Request $request){
+
+        $title = "Browse Jobs";
+
+
+        $categories = Category::orderBy('category_name', 'asc')->get();
+        $countries = Country::all();
+        $old_country = false;
+        if (request('country')){
+            $old_country = Country::find(request('country'));
+        }
+
+
+        $jobs = Job::active();
+
+        if ($request->q){
+            $jobs = $jobs->where(function ($query) use($request){
+                $query->where('job_title', 'like', "%{$request->q}%")
+                    ->orWhere('position', 'like', "%{$request->q}%")
+                    ->orWhere('description', 'like', "%{$request->q}%");
+            });
+        }
+
+        if ($request->location){
+            $jobs = $jobs->where('city_name', 'like', "%{$request->location}%");
+        }
+
+        if ($request->gender){
+            $jobs = $jobs->whereGender($request->gender);
+        }
+        if ($request->exp_level){
+            $jobs = $jobs->whereExpLevel($request->exp_level);
+        }
+        if ($request->job_type){
+            $jobs = $jobs->whereJobType($request->job_type);
+        }
+        if ($request->country){
+            $jobs = $jobs->whereCountryId($request->country);
+        }
+        if ($request->state){
+            $jobs = $jobs->whereStateId($request->state);
+        }
+        if ($request->category){
+            $jobs = $jobs->whereCategoryId($request->category);
+        }
+
+        $jobs = $jobs->orderBy('id', 'desc')->with('employer')->paginate(20);
+
+        return view('jobs', compact('title', 'jobs','categories', 'countries', 'old_country'));
+    }
+
+
 }
