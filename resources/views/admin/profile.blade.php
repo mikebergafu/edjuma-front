@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-12">
 
-            @if($user->is_employer() || $user->is_agent())
+            @if( $user->is_employer())
                 <div class="profile-company-logo mb-3">
                     <img src="{{$user->logo_url}}" class="img-fluid" style="max-width: 100px;" />
                 </div>
@@ -56,7 +56,7 @@
 
 
 
-            @if($user->is_employer() || $user->is_agent())
+            @if($user->is_employer())
                     <h3 class="mb-4">About Company</h3>
 
                     <table class="table table-bordered table-striped">

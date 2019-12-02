@@ -132,7 +132,7 @@ function get_stripe_key($type = 'publishable'){
 function ad_status_change($ad_id = 0, $status = 1){
     if ($ad_id > 0){
         $ad = \App\Ad::find($ad_id);
-        
+
         if ($ad){
             $previous_status = $ad->status;
             //Publish ad
@@ -760,4 +760,6 @@ if ( ! function_exists('paypal_ipn_verify')){
             return false;
         }
     }
+
+    
 }

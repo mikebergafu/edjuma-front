@@ -9,6 +9,7 @@ use App\Job;
 use App\JobApplication;
 use App\Mail\ShareByEMail;
 use App\State;
+use App\Transactions;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,21 +20,34 @@ use Mockery\Exception;
 
 class JobController extends Controller
 {
+    public function postTotalWage(Request $request){
+        return response()->json(['result'=>'dickson'],200);
+    }
     public function newJob(){
         $title = __('app.post_new_job');
-
-        $categories = Category::orderBy('category_name', 'asc')->get();
+        if (Auth::user()->user_type != 'agent'){
+            $categories = Category::orderBy('category_name', 'asc')->get();
+        }else{
+            $categories = Category::where('id', 3)->get();
+        }
         $countries = Country::all();
         $old_country = false;
         if (old('country')){
             $old_country = Country::find(old('country'));
         }
 
-        return view('admin.post-new-job', compact('title', 'categories','countries', 'old_country'));
+        if (Auth::user()->user_type == "agent"){
+            return view('admin.post-new-job-poster', compact('title', 'categories','countries', 'old_country'));
+        }else{
+            return view('admin.post-new-job', compact('title', 'categories','countries', 'old_country'));
+        }
+
     }
 
 
     public function newJobPost(Request $request){
+        //return $request->all();
+
         $user_id = Auth::user()->id;
 
         $rules = [
@@ -105,6 +119,92 @@ class JobController extends Controller
     }
 
 
+    public function newJobPostPoster(Request $request){
+        //return $request->all();
+
+        $user_id = Auth::user()->id;
+
+        $rules = [
+            'job_title' => ['required', 'string', 'max:190'],
+            'position' => ['required', 'string', 'max:190'],
+            'category' => 'required',
+            'description' => 'required',
+            'deadline' => 'required',
+        ];
+        $this->validate($request, $rules);
+
+        $job_title = $request->job_title;
+        $job_slug = unique_slug($job_title, 'Job', 'job_slug');
+
+
+        $country = Country::find($request->country);
+        $state_name = null;
+        if ($request->state){
+            $state = State::find($request->state);
+            $state_name = $state->state_name;
+        }
+
+        $job_id = strtoupper(str_random(8));
+        $data = [
+            'user_id'                   => $user_id,
+            'job_title'                 => $job_title,
+            'job_slug'                  => $job_slug,
+            'position'                  => $request->position,
+            'category_id'               => $request->category,
+            //'is_any_where'              => $request->is_any_where,
+            'salary'                    => $request->salary,
+            //'salary_upto'               => $request->salary_upto,
+            //'is_negotiable'             => $request->is_negotiable,
+            'salary_currency'           => $request->salary_currency,
+            'salary_cycle'              => $request->salary_cycle,
+            'vacancy'                   => $request->vacancy,
+            'gender'                    => $request->gender,
+            'exp_level'                 => $request->exp_level,
+            'job_type'                => $request->job_type,
+
+            'experience_required_years' => $request->experience_required_years,
+            //'experience_plus'           => $request->experience_plus,
+            'description'               => $request->description,
+            //'skills'                    => $request->skills,
+            //'responsibilities'          => $request->responsibilities,
+            //'educational_requirements'  => $request->educational_requirements,
+            //'experience_requirements'   => $request->experience_requirements,
+            //'additional_requirements'   => $request->additional_requirements,
+            //'benefits'                  => $request->benefits,
+            'apply_instruction'         => $request->apply_instruction,
+            'country_id'                => $request->country,
+            'country_name'              => $country->country_name,
+            'state_id'                  => $request->state,
+            'state_name'                => $state_name,
+            'city_name'                 => $request->city_name,
+            'deadline'                  => $request->deadline,
+            'status'                    => 0,
+            'is_premium'                => 0,
+        ];
+
+        $job = Job::create($data);
+        //insert payment details into
+        $newjob = Job::where('user_id',Auth::user()->id)->first();
+        $transaction = new Transactions();
+        $transaction['transaction_id'] =rand(0, 1000000000000000);
+        $transaction['job_is'] = $newjob->id;
+        $transaction['user_name'] =Auth::user()->id;
+        $transaction['user_email'] =Auth::user()->email;
+        $transaction['payment_mode'] ='MoMo';
+        $transaction['amount'] = $request->vacancy * $request->salary * $request->number_days;
+        $transaction['status'] = 0;
+        $transaction->save();
+
+        //send email
+        if ( ! $job){
+            return back()->with('error', 'app.something_went_wrong')->withInput($request->input());
+        }
+
+        $job->update(['job_id' => $job->id.$job_id]);
+        return redirect(route('posted_jobs'))->with('success', __('app.job_posted_success'));
+    }
+
+
     public function postedJobs(){
         $title = __('app.posted_jobs');
         $user = Auth::user();
@@ -157,8 +257,7 @@ class JobController extends Controller
             'name'              => 'required',
             'email'             => 'required',
             'phone_number'      => 'required',
-            'message'           => 'required',
-            'resume'            => 'required',
+
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -168,13 +267,35 @@ class JobController extends Controller
             $user_id = Auth::user()->id;
         }
 
+        //return session()->all();
+        //return $request->all();
+
         session()->flash('job_validation_fails', true);
+        $job =  Job::findorfail($request->job_id);
 
         if ($validator->fails()){
             return redirect()->back()->withInput($request->input())->withErrors($validator);
         }
 
-        if ($request->hasFile('resume')){
+
+
+                $application_data = [
+                    'job_id'                => $request->job_id,
+                    'employer_id'           => $job->user_id,
+                    'user_id'               => $user_id,
+                    'name'                  => $request->name,
+                    'email'                 => $request->email,
+                    'phone_number'          => $request->phone_number,
+                    'message'               => 'Apply for job',
+                    'resume'                => 'no image',
+                ];
+                JobApplication::create($application_data);
+
+                session()->forget('job_validation_fails');
+                return redirect()->back()->withInput($request->input())->with('success', trans('app.job_applied_success_msg')) ;
+
+
+        /*if ($request->hasFile('resume')){
             $image = $request->file('resume');
             $valid_extensions = ['pdf','doc','docx'];
             if ( ! in_array(strtolower($image->getClientOriginalExtension()), $valid_extensions) ){
@@ -211,9 +332,9 @@ class JobController extends Controller
             } catch (\Exception $e){
                 return redirect()->back()->withInput($request->input())->with('error', $e->getMessage()) ;
             }
-        }
+        }*/
 
-        return redirect()->back()->withInput($request->input())->with('error', trans('app.error_msg')) ;
+       /* return redirect()->back()->withInput($request->input())->with('error', trans('app.error_msg')) ;*/
     }
 
     public function flagJob(Request $request, $id){

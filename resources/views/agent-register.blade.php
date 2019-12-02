@@ -6,14 +6,14 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{!! $title !!}</div>
+                    <div class="card-header">{{--{!! $title !!}--}}Job Seeker / Job Poster</div>
 
                     <div class="card-body">
                         <form method="POST" action="">
                             @csrf
 
                             <div class="form-group row">
-                                <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }} <span class="mendatory-mark">*</span></label>
+                                <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('First Name') }} <span class="mendatory-mark">*</span></label>
 
                                 <div class="col-md-6">
                                     <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
@@ -27,7 +27,7 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="company" class="col-md-4 col-form-label text-md-right">{{ __('app.company') }} <span class="mendatory-mark">*</span></label>
+                                <label for="company" class="col-md-4 col-form-label text-md-right">{{ __('Last Name') }} <span class="mendatory-mark">*</span></label>
                                 <div class="col-md-6">
                                     <input id="company" type="text" class="form-control{{ $errors->has('company') ? ' is-invalid' : '' }}" name="company" value="{{ old('company') }}" required autofocus>
 
@@ -77,9 +77,9 @@
 
 
 
-                            <legend>Contact Information</legend>
+                           {{-- <legend>Contact Information</legend>--}}
 
-                            <div class="form-group row">
+                            {{--<div class="form-group row">
                                 <label for="phone" class="col-md-4 col-form-label text-md-right">{{ __('app.phone') }} <span class="mendatory-mark">*</span></label>
                                 <div class="col-md-6">
                                     <input id="phone" type="text" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" name="phone" value="{{ old('phone') }}" required autofocus>
@@ -171,7 +171,7 @@
                                     </span>
                                     @endif
                                 </div>
-                            </div>
+                            </div>--}}
 
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">

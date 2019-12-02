@@ -84,7 +84,10 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'dashboard'], function(){
 
             Route::group(['prefix'=>'job'], function(){
                 Route::get('new', 'JobController@newJob')->name('post_new_job');
+                //Route::get('new', 'JobController@newJobPoster')->name('post_new_job');
                 Route::post('new', 'JobController@newJobPost');
+                Route::post('wages', 'JobController@postTotalWage');
+                Route::post('newposter', 'JobController@newJobPostPoster')->name('newposter');
                 Route::get('edit/{job_id}', 'JobController@edit')->name('edit_job');
                 Route::post('edit/{job_id}', 'JobController@update');
                 Route::get('posted', 'JobController@postedJobs')->name('posted_jobs');
@@ -160,6 +163,7 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'dashboard'], function(){
 
     Route::group(['prefix'=>'payments'], function() {
         Route::get('/', 'PaymentController@index')->name('payments');
+        Route::get('/paynow/{id}', 'PaymentController@paynow')->name('paynow');
 
         Route::get('view/{id}', ['as'=>'payment_view', 'uses' => 'PaymentController@view']);
         Route::get('status-change/{id}/{status}', ['as'=>'status_change', 'uses' => 'PaymentController@markSuccess']);

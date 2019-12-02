@@ -466,6 +466,7 @@ class ComposerStaticInit1da09113522caa6fe29f2817426cd884
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'App\\State' => __DIR__ . '/../..' . '/app/State.php',
+        'App\\Transactions' => __DIR__ . '/../..' . '/app/Transactions.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'App\\UserFollowingEmployer' => __DIR__ . '/../..' . '/app/UserFollowingEmployer.php',
         'Barryvdh\\Debugbar\\Console\\ClearCommand' => __DIR__ . '/..' . '/barryvdh/laravel-debugbar/src/Console/ClearCommand.php',

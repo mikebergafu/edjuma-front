@@ -186,7 +186,6 @@
                         <div class="alert bg-light mt-4 mb-4">
                             <h5>@lang('app.apply_instruction')</h5>
                             {!! nl2br($job->apply_instruction) !!}
-
                         </div>
 
 
@@ -353,7 +352,6 @@
                 <div class="widget-box bg-white p-3 box-shadow">
 
                     <div class="additional-job-action-box">
-
                         <p><a href="javascript:;" data-toggle="modal" data-target="#shareByEMail"><i class="la la-envelope"></i> @lang('app.share_by_email') </a> </p>
                         <p><a href="{{route('jobs_by_employer', $job->employer->company_slug)}}"><i class="la la-list-ul"></i> @lang('app.check_all_job_employer') </a> </p>
                         <p><a href="javascript:;" data-toggle="modal" data-target="#jobFlagModal"><i class="la la-flag" ></i> @lang('app.flag_this_job') </a> </p>
@@ -400,34 +398,34 @@
 
                         <div class="form-group {{ $errors->has('name')? 'has-error':'' }}">
                             <label for="name" class="control-label">@lang('app.name'):</label>
-                            <input type="text" class="form-control {{e_form_invalid_class('name', $errors)}}" id="name" name="name" value="{{old('name')}}" placeholder="@lang('app.your_name')">
+                            <input type="text" class="form-control {{e_form_invalid_class('name', $errors)}}" id="name" name="name" value="{{auth()->user()->name}}" placeholder="{{auth()->user()->name}}">
                             {!! e_form_error('name', $errors) !!}
                         </div>
 
                         <div class="form-group {{ $errors->has('email')? 'has-error':'' }}">
                             <label for="email" class="control-label">@lang('app.email'):</label>
-                            <input type="text" class="form-control {{e_form_invalid_class('email', $errors)}}" id="email" name="email" value="{{old('email')}}" placeholder="@lang('app.email_ie')">
+                            <input type="text" class="form-control {{e_form_invalid_class('email', $errors)}}" id="email" name="email" value="{{auth()->user()->email}}" placeholder="{{auth()->user()->email}}">
                             {!! e_form_error('email', $errors) !!}
                         </div>
 
                         <div class="form-group {{ $errors->has('phone_number')? 'has-error':'' }}">
                             <label for="phone_number" class="control-label">@lang('app.phone_number'):</label>
-                            <input type="text" class="form-control {{e_form_invalid_class('phone_number', $errors)}}" id="phone_number" name="phone_number" value="{{old('phone_number')}}" placeholder="@lang('app.phone_number')">
+                            <input type="text" class="form-control {{e_form_invalid_class('phone_number', $errors)}}" id="phone_number" name="phone_number" value="{{auth()->user()->phone}}" placeholder="{{auth()->user()->phone}}">
                             {!! e_form_error('phone_number', $errors) !!}
                         </div>
 
-                        <div class="form-group {{ $errors->has('message')? 'has-error':'' }}">
-                            <label for="message-text" class="control-label">@lang('app.message'):</label>
+                        {{--<div class="form-group {{ $errors->has('message')? 'has-error':'' }}">
+
                             <textarea class="form-control {{e_form_invalid_class('message', $errors)}}" id="message" name="message" placeholder="@lang('app.your_message')">{{old('message')}}</textarea>
                             {!! e_form_error('message', $errors) !!}
-                        </div>
+                        </div>--}}
 
-                        <div class="form-group {{ $errors->has('resume')? 'has-error':'' }}">
+                        {{--<div class="form-group {{ $errors->has('resume')? 'has-error':'' }}">
                             <label for="resume" class="control-label">@lang('app.resume'):</label>
                             <input type="file" class="form-control {{e_form_invalid_class('resume', $errors)}}" id="resume" name="resume">
                             <p class="text-muted">@lang('app.resume_file_types')</p>
                             {!! e_form_error('resume', $errors) !!}
-                        </div>
+                        </div>--}}
 
                         <input type="hidden" name="job_id" value="{{$job->id}}" />
 

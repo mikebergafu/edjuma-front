@@ -27,6 +27,10 @@
         var page_data = {!! pageJsonData() !!};
         /* ]]> */
     </script>
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -123,7 +127,7 @@ $user = Auth::user();
                             <li class="{{request()->is('dashboard/employer*')? 'active' : ''}}">
                                 <a href="#" class="list-group-item-action">
                                     <span class="sidebar-icon"><i class="la la-black-tie"></i> </span>
-                                    <span class="title">@lang('app.employer')</span>
+                                    <span class="title">@lang('Jobs')</span>
                                     <span class="arrow"><i class="la la-arrow-right"></i> </span>
                                 </a>
 
@@ -264,7 +268,7 @@ $user = Auth::user();
                         </div>
 
                         <div class="dashboard-footer mb-3">
-                            <a href="https://www.themeqx.com/product/jobfair-job-board-application" target="_blank">JobFair</a> Version {{config('app.version')}}
+                            <p>Edjuma | All Rights Reserved  Copyright @ 2019</p>
                         </div>
                     </div>
 
@@ -278,6 +282,8 @@ $user = Auth::user();
     <!-- Scripts -->
     @yield('page-js')
     <script src="{{ asset('assets/js/admin.js') }}" defer></script>
+@include('scripts.cotrols')
+
 
 </body>
 </html>

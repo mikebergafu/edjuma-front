@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{!! !empty($title) ? $title : 'JobFair' !!}</title>
+    <title>{!! !empty($title) ? $title : 'Edjuma' !!}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" {{ ! request()->is('payment*')? 'defer' : ''}}></script>
@@ -43,21 +43,30 @@
 
 </head>
 <body class="{{request()->routeIs('home') ? ' home ' : ''}} {{request()->routeIs('job_view') ? ' job-view-page ' : ''}}">
-<div id="app">
+<div>
     <nav class="navbar  navbar-expand-md navbar-light navbar-laravel
-                 navbar-sticky bootsnav
+                 navbar-sticky bootsnav   navbar-light light-green lighten-4
 
 {{request()->routeIs('home') ? 'transparent-navbar' : ''}}">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
                 <img src="{{asset('assets/images/logo.png')}}" />
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+            {{--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <span class="navbar-toggler-icon"></span>
+            </button>--}}
+
+
+            <button class="navbar-toggler toggler-example" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1"
+                    aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent navbar-menu">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+
+
+            {{--<div class="collapse navbar-collapse" id="navbarSupportedContent navbar-menu">--}}
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav {{--mr-auto--}} navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
                     <li class="nav-item"><a class="nav-link" href="{{route('home')}}"><i class="la la-home"></i> @lang('app.home')</a> </li>
@@ -130,6 +139,7 @@
     <div class="main-container">
         @yield('content')
     </div>
+    @include('scripts.cotrols')
 
     <footer>
         <div class="container">
@@ -182,7 +192,7 @@
                 <div class="col-md-4">
 
                     <div class="footer-menu-wrap  mt-2">
-                        <h4 class="mb-3">@lang('app.employer')</h4>
+                        <h4 class="mb-3">@lang('app.company')</h4>
 
                         <ul class="list-unstyled">
                             <li><a href="{{route('register_employer')}}">@lang('app.create_account')</a> </li>
@@ -202,7 +212,7 @@
                 <div class="col-md-12">
                     <div class="footer-copyright-text-wrap text-center mt-4">
                         {{--<p>{!! get_text_tpl(get_option('copyright_text')) !!}</p>--}}
-                        <p>Edjuma | All Rights Reserved - V1.0.0</p>
+                        <p>Edjuma | All Rights Reserved  Copyright @ 2019</p>
                     </div>
                 </div>
             </div>

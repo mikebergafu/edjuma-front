@@ -65,6 +65,99 @@
 
 
 
+
+
+
+
+
+    @if($regular_jobs->count())
+        <div class=" pb-5 pt-5">
+
+            <div class="container">
+                <div class="regular-job-container p-3">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="mb-3">@lang('app.new_jobs')</h4>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        @foreach($regular_jobs as $regular_job)
+                            <div class="col-md-4  boxshadow">
+                                <!-- Card -->
+                                    <div class="">
+                                        <div class="card-body">
+
+                                            <!-- Title -->
+                                            <h4 class="card-title"><a href="{{route('job_view', $regular_job->job_slug)}}">{!! $regular_job->job_title !!}</a></h4>
+                                            <!-- Text -->
+                                            <p class="card-text">
+                                                <i class="la la-map-marker"></i>
+                                                @if($regular_job->city_name)
+                                                    {!! $regular_job->city_name !!},
+                                                @endif
+                                                @if($regular_job->state_name)
+                                                    {!! $regular_job->state_name !!},
+                                                @endif
+                                                @if($regular_job->state_name)
+                                                    {!! $regular_job->country_name !!}
+                                                @endif
+                                            </p>
+                                            <!-- Button -->
+                                            <a href="{{route('job_view', $regular_job->job_slug)}}" class="btn btn-success">View Job</a>
+
+                                        </div>
+
+                                    </div>
+                                    <!-- Card -->
+
+
+
+
+                            </div>
+
+                        @endforeach
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+    @endif
+
+
+
+
+    <section class="features regular-jobs-wrap">
+        <div class="container">
+            <div class="col-md-6 col-sm-6">
+                <div class="features-content bg-white">
+                    <span style="color: green" class="box1"><i class="fa fa-building"></i></span></span>
+                    <h3>@lang('app.employer')</h3>
+                    <p>@lang('app.employer_new_desc')</p>
+                    <a href="{{route('register_employer')}}" class="btn btn-success"><i
+                            class="la la-user-plus"></i> @lang('app.register_account') </a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6">
+                <div class="features-content bg-white">
+                    <span style="color: green" class="box1"><i class="fa fa-address-book"></i></span></span>
+                    <h3>@lang('app.job_seeker')</h3>
+                    <p>@lang('app.job_seeker_new_desc')</p>
+                    <a href="{{route('register_agent')}}" class="btn btn-success">@lang('app.register_account')</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="divider">
     @if($categories->count())
         <div class="home-categories-wrap bg-white pb-5 pt-5">
             <div class="container">
@@ -97,6 +190,7 @@
 
 
     @if($premium_jobs->count())
+
         <div class="premium-jobs-wrap pb-5 pt-5">
 
             <div class="container">
@@ -157,163 +251,7 @@
 
         </div>
     @endif
-
-    {{--<div class="new-registration-page bg-white pb-5 pt-5">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-md-4">
-                    <div class="card" style="width: 18rem;">
-                        <div class="home-register-account-box">
-                        <div class="card-body">
-                            <h5 class="card-title">@lang('app.job_seeker')</h5>
-                            <p class="card-text">@lang('app.job_seeker_new_desc')</p>
-                            <a href="{{route('register_job_seeker')}}" class="btn btn-success">@lang('app.register_account')</a>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card" style="width: 18rem;">
-                        <div class="home-register-account-box">
-                            <div class="card-body">
-                                <h5 class="card-title">@lang('app.employer')</h5>
-                                <p class="card-text">@lang('app.employer_new_desc')</p>
-                                <a href="{{route('register_job_seeker')}}" class="btn btn-success">@lang('app.register_account')</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card" style="width: 18rem;">
-                        <div class="home-register-account-box">
-                            <div class="card-body">
-                                <h5 class="card-title">@lang('app.agency')</h5>
-                                <p class="card-text">@lang('app.agency_new_desc')</p>
-                                <a href="{{route('register_agent')}}" class="btn btn-success">@lang('app.register_account')</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-
-
-
-                --}}{{--<div class="col-md-4">
-                    <div class="home-register-account-box">
-                        <h4>@lang('app.employer')</h4>
-                        <p class="box-icon"><img src="{{asset('assets/images/enterprise.png')}}"/></p>
-                        <p>@lang('app.employer_new_desc')</p>
-                        <a href="{{route('register_employer')}}" class="btn btn-success"><i
-                                class="la la-user-plus"></i> @lang('app.register_account') </a>
-                    </div>
-                </div>--}}{{--
-
-                --}}{{--<div class="col-md-4">
-                    <div class="home-register-account-box">
-                        <h4>@lang('app.agency')</h4>
-                        <p class="box-icon"><img src="{{asset('assets/images/agent.png')}}"/></p>
-                        <p>@lang('app.agency_new_desc')</p>
-                        <a href="{{route('register_agent')}}" class="btn btn-success"><i
-                                class="la la-user-plus"></i> @lang('app.register_account') </a>
-                    </div>
-                </div>--}}{{--
-            </div>
-        </div>
-    </div>--}}
-    <section class="features">
-        <div class="container">
-
-
-            <div class="col-md-4 col-sm-4">
-                <div class="features-content">
-                    <span style="color: green" class="box1"><i class="fa fa-address-book"></i></span></span>
-                    <h3>@lang('app.job_seeker')</h3>
-                    <p>@lang('app.job_seeker_new_desc')</p>
-                    <a href="{{route('register_job_seeker')}}" class="btn btn-success">@lang('app.register_account')</a>
-                </div>
-            </div>
-
-            <div class="col-md-4 col-sm-4">
-                <div class="features-content">
-                    <span style="color: green" class="box1"><i class="fa fa-building"></i></span></span>
-                    <h3>@lang('app.employer')</h3>
-                    <p>@lang('app.employer_new_desc')</p>
-                    <a href="{{route('register_employer')}}" class="btn btn-success"><i
-                            class="la la-user-plus"></i> @lang('app.register_account') </a>
-                </div>
-            </div>
-
-            <div class="col-md-4 col-sm-4">
-                <div class="features-content">
-                    <span style="color: green" class="box1"><i class="fa fa-address-book"></i></span></span>
-                    <h3>@lang('app.agency')</h3>
-                    <p>@lang('app.agency_new_desc')</p>
-                    <a href="{{route('register_agent')}}" class="btn btn-success">@lang('app.register_account')</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    @if($regular_jobs->count())
-        <div class="regular-jobs-wrap pb-5 pt-5">
-
-            <div class="container">
-                <div class="regular-job-container p-3">
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h4 class="mb-3">@lang('app.new_jobs')</h4>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        @foreach($regular_jobs as $regular_job)
-                            <div class="col-md-4 mb-3">
-
-                                <div class="row">
-                                    <div class="col-md-12">
-
-                                        <p class="job-title m-0">
-                                            <a href="{{route('job_view', $regular_job->job_slug)}}">{!! $regular_job->job_title !!}</a>
-                                        </p>
-
-                                        <p class="text-muted  m-0">
-                                            <i class="la la-map-marker"></i>
-                                            @if($regular_job->city_name)
-                                                {!! $regular_job->city_name !!},
-                                            @endif
-                                            @if($regular_job->state_name)
-                                                {!! $regular_job->state_name !!},
-                                            @endif
-                                            @if($regular_job->state_name)
-                                                {!! $regular_job->country_name !!}
-                                            @endif
-                                        </p>
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        @endforeach
-
-                    </div>
-
-
-                </div>
-
-            </div>
-
-
-        </div>
-    @endif
-
+</section>
     <section class="counter">
         <div class="container">
             <div class="col-md-3 col-sm-3">

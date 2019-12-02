@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Job;
 use App\Payment;
 use App\Pricing;
+use App\Transactions;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class PaymentController extends Controller
 {
@@ -15,17 +18,25 @@ class PaymentController extends Controller
         $user = Auth::user();
         $title = trans('app.payments');
 
-        if ($user->is_admin()){
-            if ($request->q){
-                $payments = Payment::with('user')->where('email', 'like', "%{$request->q}%")->orderBy('id', 'desc')->paginate(20);
-            }else{
-                $payments = Payment::with('user')->orderBy('id', 'desc')->paginate(20);
-            }
-        }else{
-            $payments = Payment::with('user')->whereUserId($user->id)->orderBy('id', 'desc')->paginate(20);
-        }
 
-        return view('admin.payments', compact('title', 'payments'));
+
+        $transactions = Transactions::where('user_name',Auth::user()->id)->paginate(5);
+
+        return view('admin.payments', compact('title', 'transactions'));
+    }
+
+    public function paynow($id){
+        //return $id;
+        $posted_job = Job::where('id',$id)->first();
+        $posted_job->status = 1;
+        $posted_job->update();
+
+        $transactions = Transactions::where('job_is',$id)->first();
+        $transactions->status = 1;
+        $transactions->update();
+
+        return back()->with('success', trans('Payment Successfull'));
+
     }
 
     public function view($id){

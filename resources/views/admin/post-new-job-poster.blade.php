@@ -6,37 +6,10 @@
 @endsection
 
 @section('content')
-
-
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-            <a class="btn-success nav-link active btn" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-               aria-selected="true">CASUAL JOB POST</a>
-        </li>
-        <li class="nav-item">
-            <a class=" btn-success nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-               aria-selected="false">PROFESSIONAL JOB POST</a>
-        </li>
-
-    </ul>
-    <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <div class="row">
-                <div class="col-md-10">
-
-                   @include('forms.post_job')
-
-
-
-                </div>
-            </div>
-
-        </div>
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <div class="row">
+    <div class="row">
         <div class="col-md-10">
 
-            <form method="post" action="">
+            {{--<form method="post" action="{{route('newposter')}}">
                 @csrf
 
                 <div class="form-group row {{ $errors->has('job_title')? 'has-error':'' }}">
@@ -48,14 +21,10 @@
                     </div>
                 </div>
 
-                <div class="form-group row {{ $errors->has('position')? 'has-error':'' }}">
-                    <label for="position" class="col-sm-4 control-label"> @lang('app.position')</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control {{e_form_invalid_class('position', $errors)}}" id="position" value="{{ old('position') }}" name="position" placeholder="@lang('app.position')">
 
-                        {!! e_form_error('position', $errors) !!}
-                    </div>
-                </div>
+                <input type="text" class="form-control {{e_form_invalid_class('position', $errors)}}" id="position" value="Casual Job" name="position" placeholder="@lang('app.position')" hidden>
+
+
 
                 <div class="form-group row {{ $errors->has('category')? 'has-error':'' }}">
                     <label for="category" class="col-sm-4 control-label">@lang('app.category')</label>
@@ -74,16 +43,13 @@
                 <div class="form-group row {{ $errors->has('salary_cycle')? 'has-error':'' }}">
                     <label for="salary_cycle" class="col-sm-4 control-label">@lang('app.salary_cycle')</label>
                     <div class="col-sm-8">
-
                         <div class="price_input_group">
-
-                            <select class="form-control {{e_form_invalid_class('salary_cycle', $errors)}}" name="salary_cycle">
-                                <option value="monthly" {{ old('salary_cycle') == 'monthly' ? 'selected':'' }}>@lang('app.monthly')</option>
+                            <select class="form-control {{e_form_invalid_class('salary_cycle', $errors)}}" name="salary_cycle" readonly>
+                                --}}{{--<option value="monthly" {{ old('salary_cycle') == 'monthly' ? 'selected':'' }}>@lang('app.monthly')</option>
                                 <option value="yearly" {{ old('salary_cycle') == 'yearly' ? 'selected':'' }}>@lang('app.yearly')</option>
-                                <option value="weekly" {{ old('salary_cycle') == 'weekly' ? 'selected':'' }}>@lang('app.weekly')</option>
+                                <option value="weekly" {{ old('salary_cycle') == 'weekly' ? 'selected':'' }}>@lang('app.weekly')</option>--}}{{--
                                 <option value="daily" {{ old('salary_cycle') == 'daily' ? 'selected':'' }}>@lang('app.daily')</option>
-                                <option value="hourly" {{ old('salary_cycle') == 'hourly' ? 'selected':'' }}>@lang('app.hourly')</option>
-
+                                --}}{{--<option value="hourly" {{ old('salary_cycle') == 'hourly' ? 'selected':'' }}>@lang('app.hourly')</option>--}}{{--
                             </select>
 
                             {!! e_form_error('salary_cycle', $errors) !!}
@@ -95,28 +61,25 @@
                 <div class="form-group row {{ $errors->has('salary')? 'has-error':'' }}">
                     <label for="salary" class="col-sm-4 control-label"> @lang('app.salary')</label>
                     <div class="col-sm-8">
-
-
                         <div class="form-group row">
-                            <div class="col-md-6">
-                                <input type="number" class="form-control {{e_form_invalid_class('salary', $errors)}}" id="salary" value="{{ old('salary') }}" name="salary" placeholder="@lang('app.salary')">
+                            <div class="col-md-12">
+                                <input type="number" class="form-control {{e_form_invalid_class('salary', $errors)}} price-child" id="salary" value="{{ old('salary') }}" name="salary" placeholder="@lang('app.salary')">
                             </div>
-                            <div class="col-md-6">
+                            --}}{{--<div class="col-md-6">
                                 <label> <input type="checkbox" name="is_negotiable" value="1" {{checked('1', old('is_negotiable'))}}> @lang('app.is_negotiable')</label>
-                            </div>
+                            </div>--}}{{--
                         </div>
 
                         {!! e_form_error('salary', $errors) !!}
                     </div>
                 </div>
 
-                <div class="form-group row {{ $errors->has('salary_upto')? 'has-error':'' }}">
-                    <label for="salary_upto" class="col-sm-4 control-label"> @lang('app.salary_upto')</label>
+                <div class="form-group row">
+                    <label for="salary_upto" class="col-sm-4 control-label"> @lang('Number Of Days')</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control {{e_form_invalid_class('salary_upto', $errors)}}" id="salary_upto" value="{{ old('salary_upto') }}" name="salary_upto" placeholder="@lang('app.salary_upto')">
+                        <input type="number" class="form-control price-child" id="number-days" name="number-days" placeholder="@lang('Number Of Days')" required>
 
-                        <p class="text-info">@lang('app.salary_upto_desc')</p>
-                        {!! e_form_error('salary_upto', $errors) !!}
+
                     </div>
                 </div>
 
@@ -125,23 +88,22 @@
                     <div class="col-sm-8">
 
                         <div class="price_input_group">
-
-                            <select class="form-control {{e_form_invalid_class('salary_currency', $errors)}}" name="salary_currency">
+                            <input type="text" class="form-control" name="salary_currency" placeholder="GHC" readonly>
+                            --}}{{--<select class="form-control {{e_form_invalid_class('salary_currency', $errors)}}" name="salary_currency">
 
                                 @foreach(get_currencies() as $currency => $currency_name)
                                     <option value="{{$currency}}">{{$currency}} | {{$currency_name}}</option>
                                 @endforeach
-                            </select>
-
+                            </select>--}}{{--
                             {!! e_form_error('salary_currency', $errors) !!}
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group row {{ $errors->has('vacancy')? 'has-error':'' }}">
-                    <label for="vacancy" class="col-sm-4 control-label"> @lang('app.vacancy')</label>
+                    <label for="vacancy" class="col-sm-4 control-label"> @lang('Number Of Workers')</label>
                     <div class="col-sm-8">
-                        <input type="number" class="form-control {{e_form_invalid_class('vacancy', $errors)}}" id="vacancy" value="{{ old('vacancy') }}" name="vacancy" placeholder="@lang('app.vacancy')">
+                        <input type="number" class="form-control {{e_form_invalid_class('vacancy', $errors)}} price-child" id="vacancy" value="{{ old('vacancy') }}" name="vacancy" placeholder="@lang('Number Of Workers')">
 
                         {!! e_form_error('vacancy', $errors) !!}
                     </div>
@@ -182,20 +144,16 @@
                     <label for="job_type" class="col-sm-4 control-label">@lang('app.job_type')</label>
                     <div class="col-sm-8">
                         <select class="form-control {{e_form_invalid_class('job_type', $errors)}}" name="job_type" id="job_type">
-                            <option value="full_time" {{ old('job_type') == 'full_time' ? 'selected':'' }}>@lang('app.full_time')</option>
-                            <option value="internship" {{ old('job_type') == 'internship' ? 'selected':'' }}>@lang('app.internship')</option>
-                            <option value="part_time" {{ old('job_type') == 'part_time' ? 'selected':'' }}>@lang('app.part_time')</option>
+
                             <option value="contract" {{ old('job_type') == 'contract' ? 'selected':'' }}>@lang('app.contract')</option>
-                            <option value="temporary" {{ old('job_type') == 'temporary' ? 'selected':'' }}>@lang('app.temporary')</option>
-                            <option value="commission" {{ old('job_type') == 'commission' ? 'selected':'' }}>@lang('app.commission')</option>
-                            <option value="internship" {{ old('job_type') == 'internship' ? 'selected':'' }}>@lang('app.internship')</option>
+
                         </select>
 
                         {!! e_form_error('job_type', $errors) !!}
                     </div>
                 </div>
 
-                <div class="form-group row {{ $errors->has('experience_required_years')? 'has-error':'' }}">
+                --}}{{--<div class="form-group row {{ $errors->has('experience_required_years')? 'has-error':'' }}">
                     <label for="experience_required_years" class="col-sm-4 control-label"> @lang('app.experience_required_years')</label>
                     <div class="col-sm-8">
 
@@ -210,7 +168,9 @@
 
                         {!! e_form_error('experience_required_years', $errors) !!}
                     </div>
-                </div>
+                </div>--}}{{--
+
+                <input type="number" class="form-control" id="experience_required_years" value="0" name="experience_required_years" placeholder="@lang('app.experience_required_years')" hidden>
 
                 <div class="form-group row {{ $errors->has('deadline')? 'has-error':'' }}">
                     <label for="deadline" class="col-sm-4 control-label"> @lang('app.deadline')</label>
@@ -231,7 +191,7 @@
                 </div>
 
 
-                <div class="form-group row {{ $errors->has('skills')? 'has-error':'' }}">
+                --}}{{--<div class="form-group row {{ $errors->has('skills')? 'has-error':'' }}">
                     <label class="col-sm-4 control-label"> @lang('app.skills')</label>
                     <div class="col-sm-8">
                         <textarea name="skills" class="form-control {{e_form_invalid_class('skills', $errors)}}" rows="2">{{ old('skills') }}</textarea>
@@ -285,7 +245,7 @@
                         {!! $errors->has('benefits')? '<p class="help-block">'.$errors->first('benefits').'</p>':'' !!}
                         <p class="text-info"> @lang('app.benefits_info_text')</p>
                     </div>
-                </div>
+                </div>--}}{{--
 
 
                 <div class="form-group row {{ $errors->has('apply_instruction')? 'has-error':'' }}">
@@ -297,16 +257,24 @@
                     </div>
                 </div>
 
+                <div class="form-group row">
+                    <label class="col-sm-4 control-label"> @lang('Total Wages')</label>
+                    <div class="col-sm-8">
+                        <input name="totalwages" id="total-wages" class="form-control" rows="3" placeholder="0.00" value="{{old('totalwages')}}" readonly>
+                        <p class="text-info"> Total wages to be paid when work is done</p>
+                    </div>
+                </div>
+
                 <legend>@lang('app.job_location')</legend>
 
 
-                <div class="form-group row {{ $errors->has('is_any_where')? 'has-error':'' }}">
+                --}}{{--<div class="form-group row {{ $errors->has('is_any_where')? 'has-error':'' }}">
                     <label for="is_any_where" class="col-md-4 control-label">{{ __('app.is_any_where') }} </label>
                     <div class="col-md-8">
                         <label> <input type="checkbox" name="is_any_where" value="1" {{checked('1', old('is_any_where'))}} > @lang('app.location_anywhere') </label>
                         {!! e_form_error('is_any_where', $errors) !!}
                     </div>
-                </div>
+                </div>--}}{{--
 
 
                 <div class="form-group row {{ $errors->has('country')? 'has-error':'' }}">
@@ -324,10 +292,10 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="state" class="col-md-4 control-label">{{ __('app.state') }} </label>
+                    <label for="state" class="col-md-4 control-label">{{ __('Region/State') }} </label>
                     <div class="col-md-8">
                         <select name="state" class="form-control {{e_form_invalid_class('state', $errors)}} state_options">
-                            <option value="">Select a state</option>
+                            <option value="">Select Region</option>
 
                             @if($old_country)
                                 @foreach($old_country->states as $state)
@@ -350,7 +318,7 @@
                 </div>
 
 
-                <div class="alert alert-warning">
+              --}}{{--  <div class="alert alert-warning">
 
                     <legend>@lang('app.premium_job')</legend>
 
@@ -369,7 +337,7 @@
                         </div>
                     </div>
 
-                </div>
+                </div>--}}{{--
 
                 <div class="form-group row">
                     <label class="col-sm-4"></label>
@@ -377,17 +345,15 @@
                         <button type="submit" class="btn btn-primary">@lang('app.post_new_job')</button>
                     </div>
                 </div>
-            </form>
+            </form>--}}
 
-
+            @include('forms.post_job')
 
         </div>
     </div>
 
 
-        </div>
 
-    </div>
 
 @endsection
 
@@ -396,4 +362,5 @@
 
 @section('page-js')
     <script src="{{asset('assets/plugins/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.js')}}" defer></script>
+
 @endsection

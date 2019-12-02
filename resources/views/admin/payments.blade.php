@@ -3,71 +3,74 @@
 
 @section('content')
 
-    <div class="row mb-4">
-        <div class="col-md-5">
-            @lang('app.total') : {{$payments->total()}}
-        </div>
-
-        <div class="col-md-7">
+   {{-- <div class="row mb-4">
+            <div class="col-md-12">
             <form class="form-inline" method="get" action="">
                 <div class="form-group">
                     <input type="text" name="q" value="{{request('q')}}" class="form-control" placeholder="@lang('app.payer_email')">
                 </div>
                 <button type="submit" class="btn btn-secondary">@lang('app.search')</button>
             </form>
-
         </div>
-    </div>
+    </div>--}}
 
 
     <div class="row">
         <div class="col-md-12">
+            <table id="dt-material-checkbox" class="table table-striped" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th class="th-sm">Transaction Id
+                    </th>
+                    <th class="th-sm">Job Title
+                    </th>
+                    <th class="th-sm">Payment Mode
+                    </th>
+                    <th class="th-sm">Status
+                    </th>
+                    <th class="th-sm">Action
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($transactions as $transaction)
+                <tr>
+                    <td></td>
+                    <td>{{$transaction->transaction_id}}</td>
+                    <td>{{\App\Helpers\Controls::getJobTitle($transaction->job_is)}}</td>
+                    <td>MoMo</td>
+                    <td>
+                        @if($transaction->status === 1)
+                            Success
+                        @elseif($transaction->status === 2)
+                            Invalid
+                        @else
+                            Pending
+                        @endif
 
-            @if($payments->count() > 0)
-                <table class="table table-striped table-bordered">
+                    </td>
+                    <td>
+                        @if($transaction->status == 1)
+                            <button href="#" class="btn btn-success">Paid</button>
+                        @endif
+                        @if($transaction->status == 2)
+                            <button href="#" class="btn btn-info">Payment Error</button>
+                        @endif
 
-                    <tr>
-                        <th>@lang('app.name')</th>
-                        <th>@lang('app.payer_email')</th>
-                        <th>@lang('app.amount')</th>
-                        <th>@lang('app.method')</th>
-                        <th>@lang('app.time')</th>
-                        <th>#</th>
-                    </tr>
+                        @if($transaction->status == 0)
+                            <a href="{{route('paynow',$transaction->job_is)}}" class="btn btn-default">Make Payment</a>
+                        @endif
 
-                    @foreach($payments as $payment)
-                        <tr>
-                            <td>
-                                <a href="{{route('payment_view', $payment->id)}}">
-                                    <i class="la la-user"></i> {{$payment->user->name}} <br />
-                                    <i class="la la-building-o"></i> {{$payment->user->company}}
-                                </a>
-                            </td>
-                            <td><a href="{{route('payment_view', $payment->id)}}"> {{$payment->email}} </a></td>
-                            <td>{!! get_amount($payment->amount) !!}</td>
-                            <td>{{$payment->payment_method}}</td>
-                            <td><span data-toggle="tooltip" title="{{$payment->created_at->format('F d, Y h:i a')}}">{{$payment->created_at->format('F d, Y')}}</span></td>
+                    </td>
+                </tr>
+                @endforeach
 
-                            <td>
-                                @if($payment->status == 'success')
-                                    <span class="text-success" data-toggle="tooltip" title="{{$payment->status}}"><i class="la la-check-circle-o"></i> </span>
-                                @else
-                                    <span class="text-danger" data-toggle="tooltip" title="{{$payment->status}}"><i class="la la-exclamation-circle"></i> </span>
-                                @endif
+                </tbody>
 
-                                <a href="{{route('payment_view', $payment->id)}}" class="btn btn-success ml-2"><i class="la la-eye"></i> </a>
-                            </td>
+            </table>
 
-                        </tr>
-                    @endforeach
 
-                </table>
-
-                {!! $payments->links() !!}
-
-            @else
-                @lang('app.no_data')
-            @endif
 
 
         </div>

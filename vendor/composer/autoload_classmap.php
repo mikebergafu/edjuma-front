@@ -53,6 +53,7 @@ return array(
     'App\\Providers\\EventServiceProvider' => $baseDir . '/app/Providers/EventServiceProvider.php',
     'App\\Providers\\RouteServiceProvider' => $baseDir . '/app/Providers/RouteServiceProvider.php',
     'App\\State' => $baseDir . '/app/State.php',
+    'App\\Transactions' => $baseDir . '/app/Transactions.php',
     'App\\User' => $baseDir . '/app/User.php',
     'App\\UserFollowingEmployer' => $baseDir . '/app/UserFollowingEmployer.php',
     'Barryvdh\\Debugbar\\Console\\ClearCommand' => $vendorDir . '/barryvdh/laravel-debugbar/src/Console/ClearCommand.php',
