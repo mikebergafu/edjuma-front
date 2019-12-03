@@ -6,7 +6,7 @@
         <div class="container">
             <div class="caption">
                 <h2>Build Your Career</h2>
-                <form >
+                <form action="{{route('jobs_listing')}}"  method="get">
                     <fieldset>
                         <div class="col-md-4 col-sm-4 no-pad">
                             <input type="text" class="form-control border-right" name="q" placeholder="@lang('app.job_title_placeholder')" />
@@ -16,7 +16,7 @@
                             <input type="text" class="form-control border-right" name="location" placeholder="@lang('app.job_location_placeholder')" />
                         </div>
 
-                        <div class="col-md-2 col-sm-2 no-pad">
+                        <div class="col-md-4 col-sm-4 no-pad">
                             <button type="submit" class="btn seub-btn" value="submit" >
                                 <i class="la la-search"></i> @lang('app.search') @lang('app.job')
                             </button>
@@ -26,50 +26,6 @@
             </div>
         </div>
     </section>
-
-    {{--<div class="home-hero-section">
-        <div class="job-search-bar">
-
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-8">
-                        <h1>Find the job that you deserve</h1>
-                        <p class="mt-4 mb-4 job-search-sub-text">More than 3000+ trusted live jobs available from 500+
-                            different employer, <br/> and agents on this website to take your career next level</p>
-                    </div>
-                </div>
-                <div class="row ">
-                    <div class="col-md-12">
-                        <form action="{{route('jobs_listing')}}" class="form-inline" method="get">
-                            <div class="form-row">
-                                <div class="col-auto">
-                                    <input type="text" name="q" class="form-control mb-2" style="min-width: 300px;"
-                                           placeholder="@lang('app.job_title_placeholder')">
-                                    <input type="text" name="location" class="form-control" style="min-width: 300px;"
-                                           placeholder="@lang('app.job_location_placeholder')">
-                                    <button type="submit" class="btn btn-success mb-2"><i
-                                            class="la la-search"></i> @lang('app.search') @lang('app.job')</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-
-    </div>--}}
-
-
-
-
-
-
-
-
-
-
     @if($regular_jobs->count())
         <div class=" pb-5 pt-5">
 
@@ -84,13 +40,14 @@
 
                     <div class="row">
                         @foreach($regular_jobs as $regular_job)
-                            <div class="col-md-4  boxshadow">
+                            <div class="col-md-4  boxshadow p-4">
                                 <!-- Card -->
+                                <a style="text-decoration: none" href="{{route('job_view', $regular_job->job_slug)}}">
                                     <div class="">
                                         <div class="card-body">
 
                                             <!-- Title -->
-                                            <h4 class="card-title"><a href="{{route('job_view', $regular_job->job_slug)}}">{!! $regular_job->job_title !!}</a></h4>
+                                            <h4 class="card-title">{!! $regular_job->job_title !!}</h4>
                                             <!-- Text -->
                                             <p class="card-text">
                                                 <i class="la la-map-marker"></i>
@@ -110,6 +67,7 @@
                                         </div>
 
                                     </div>
+                                </a>
                                     <!-- Card -->
 
 

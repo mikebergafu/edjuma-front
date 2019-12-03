@@ -9,7 +9,7 @@ return [
     |
     |
     */
-    
+
     'home'                              => 'Home',
     'go_to_home'                        => 'Go To Home',
     'view_site'                         => 'View Site',
@@ -38,8 +38,8 @@ return [
     'job_seeker'                        => 'Job Seeker',
     'agency'                            => 'Agency',
     'register_account'                  => 'Register Account',
-    'job_seeker_new_desc'               => 'Create an account to find and apply job and track your application',
-    'employer_new_desc'                 => 'Create an employer account to post your job for find talented',
+    'job_seeker_new_desc'               => 'Create an account to find and Post Casual job and track your application',
+    'employer_new_desc'                 => 'Create a Company account to post Casual and Professional Jobs',
     'agency_new_desc'                   => 'Create an agency account to post job on behalf of company ',
     'register_job_seeker'               => 'Register Job Seeker',
     'registration_successful'           => 'Register successful',
@@ -294,7 +294,7 @@ return [
     'something_went_wrong'              => 'Something went wrong, please try again later',
     'employer_profile'                  => 'Employer Profile',
     'update_employer_profile'           => 'Update Employer Profile',
-    
+
     '1-10'                              => '1-10',
     '11-50'                             => '11-50',
     '51-200'                            => '51-200',
@@ -323,7 +323,7 @@ return [
     'share_this_job'                    => 'Share This Job',
     'flag_this_job'                     => 'Flag this job',
     'share_by_email'                    => 'Share by E-Mail',
-    'check_all_job_employer'            => 'Check all jobs of this employer',
+    'check_all_job_employer'            => 'Check all jobs from this employer',
     'applying_problem'                  => 'Problem in applying for this job',
     'reason'                            => 'Reason',
     'select_a_reason'                   => 'Select a reason',

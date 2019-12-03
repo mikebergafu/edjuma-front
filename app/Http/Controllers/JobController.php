@@ -36,10 +36,15 @@ class JobController extends Controller
             $old_country = Country::find(old('country'));
         }
 
-        if (Auth::user()->user_type == "agent"){
-            return view('admin.post-new-job-poster', compact('title', 'categories','countries', 'old_country'));
+        if (Auth::user()->phone){
+            if (Auth::user()->user_type == "agent"){
+                return view('admin.post-new-job-poster', compact('title', 'categories','countries', 'old_country'));
+            }else{
+                return view('admin.post-new-job', compact('title', 'categories','countries', 'old_country'));
+            }
+
         }else{
-            return view('admin.post-new-job', compact('title', 'categories','countries', 'old_country'));
+            return back()->with('error', 'Please complete your profile');
         }
 
     }
@@ -239,6 +244,7 @@ class JobController extends Controller
      * View any single page
      */
     public function view($slug = null){
+        //return "safljadl";
         $job = Job::whereJobSlug($slug)->first();
 
         if ( ! $slug || ! $job || (! $job->is_active() && ! $job->can_edit()) ){

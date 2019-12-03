@@ -381,8 +381,6 @@
 
                 <form action="{{route('apply_job')}}" method="post" id="applyJob" enctype="multipart/form-data">
                     @csrf
-
-
                     <div class="modal-header">
                         <h5 class="modal-title" >@lang('app.online_job_application_form')</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -396,6 +394,8 @@
                             <div class="alert alert-warning">{{session('error')}}</div>
                         @endif
 
+                        @if(auth()->user())
+                            @if(auth()->user()->phone)
                         <div class="form-group {{ $errors->has('name')? 'has-error':'' }}">
                             <label for="name" class="control-label">@lang('app.name'):</label>
                             <input type="text" class="form-control {{e_form_invalid_class('name', $errors)}}" id="name" name="name" value="{{auth()->user()->name}}" placeholder="{{auth()->user()->name}}">
@@ -414,6 +414,7 @@
                             {!! e_form_error('phone_number', $errors) !!}
                         </div>
 
+
                         {{--<div class="form-group {{ $errors->has('message')? 'has-error':'' }}">
 
                             <textarea class="form-control {{e_form_invalid_class('message', $errors)}}" id="message" name="message" placeholder="@lang('app.your_message')">{{old('message')}}</textarea>
@@ -430,11 +431,25 @@
                         <input type="hidden" name="job_id" value="{{$job->id}}" />
 
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">@lang('app.close')</button>
                         <button type="submit" class="btn btn-primary" id="report_ad">@lang('app.apply_online')</button>
                     </div>
+                    @endif
+                    @if(!auth()->user()->phone)
+                        <h3>Please Complete Your Profile before you can sign up for this Job</h3>
+                        <a href="{{route('profile')}}" type="submit" class="btn btn-primary" id="report_ad">@lang('View Profile')</a>
+                    @endif
 
+                    @endif
+
+                    @if(!auth()->user())
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">@lang('app.close')</button>
+                        <a href="{{route('new_register')}}" type="submit" class="btn btn-primary" id="report_ad">@lang('app.register')</a>
+                    </div>
+                    @endif
 
                 </form>
             </div>
