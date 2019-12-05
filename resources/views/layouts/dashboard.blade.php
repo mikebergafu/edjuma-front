@@ -200,23 +200,39 @@ $user = Auth::user();
 
                             @endif
 
+
+
+
+
+
                             <li class="{{request()->is('dashboard/payments*')? 'active' : ''}}">
+                                <a href="#" class="list-group-item-action">
+                                    <span class="sidebar-icon"><i class="la la-black-tie"></i> </span>
+                                    <span class="title">@lang('app.payments')</span>
+                                    <span class="arrow"><i class="la la-arrow-right"></i> </span>
+                                </a>
+
+                                <ul class="dropdown-menu" style="display: none;">
+                                    <li><a class="sidebar-link" href="{{route('payments')}}">@lang('Posted Jobs')</a></li>
+                                    <li><a class="sidebar-link" href="{{route('payments')}}">@lang('Completed Jobs')</a></li>
+                                </ul>
+                            </li>
+
+                            {{--<li class="{{request()->is('dashboard/payments*')? 'active' : ''}}">
                                 <a href="{{route('payments')}}" class="list-group-item-action active">
                                     <span class="sidebar-icon"><i class="la la-money"></i> </span>
                                     <span class="title">@lang('app.payments')</span>
                                 </a>
-                            </li>
+                            </li>--}}
 
                             @if($user->is_admin())
-
-                            {{--
                             <li>
                                 <a href="{{route('dashboard')}}" class="list-group-item-action active">
                                     <span class="sidebar-icon"><i class="la la-user-secret"></i> </span>
                                     <span class="title">@lang('app.administrator')</span>
                                 </a>
                             </li>
-                            --}}
+
                             <li class="{{request()->is('dashboard/u/users*')? 'active' : ''}}">
                                 <a href="{{route('users')}}" class="list-group-item-action active">
                                     <span class="sidebar-icon"><i class="la la-users"></i> </span>

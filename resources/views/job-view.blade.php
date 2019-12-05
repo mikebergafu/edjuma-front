@@ -40,8 +40,12 @@
                     </p>
 
                     <p>
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#applyJobModal" ><i class="la la-calendar-plus-o"></i> @lang('app.apply_online') </button>
-
+                        @if(\App\Helpers\Controls::Check_user_applied(auth()->user()->id,$job->job_id) === "applied")
+                        <button type="button" class="btn btn-danger" ><i class="la la-calendar-plus-o"></i> @lang('Already Applied') </button>
+                        @else
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#applyJobModal" >
+                            <i class="la la-calendar-plus-o"></i> @lang('app.apply_online') </button>
+                        @endif
                         @if($job->employer->followable)
                             @if(auth()->check() && auth()->user()->isEmployerFollowed($job->employer->id))
                                 <button type="button" class="btn btn-success employer-follow-button" data-employer-id="{{$job->employer->id}}"><i class="la la-minus-circle"></i> @lang('app.unfollow') {{$employer->company}} </button>
@@ -284,9 +288,18 @@
 
                     <p><i class="la la-tag"></i> @lang('app.job_id') : {{$job->job_id}}</p>
 
+
+
+                    @if(\App\Helpers\Controls::Check_user_applied(auth()->user()->id,$job->job_id) === "applied")
+                    <p>
+                        <button type="button" class="btn btn-danger" ><i class="la la-calendar-plus-o"></i> @lang('Already Applied') </button>
+                    </p>
+                    @else
+
                     <p>
                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#applyJobModal"><i class="la la-calendar-plus-o"></i> @lang('app.apply_online') </button>
                     </p>
+                    @endif
 
                 </div>
 
@@ -456,8 +469,6 @@
 
         </div>
     </div>
-
-
 
     <div class="modal fade" id="jobFlagModal" role="dialog">
         <div class="modal-dialog" role="document">
