@@ -65,6 +65,20 @@ class UserController extends Controller
         return view('admin.applied_jobs', compact('title', 'applications'));
     }
 
+    public function jobDone($id){
+        $jobApp =  JobApplication::where('id',$id)->first();
+        $jobApp->is_shortlisted = 4;
+        return back()->with('success', trans('Job Completion Confirmed'));
+    }
+
+    public function jobCancelled($id){
+        $jobApp =  JobApplication::where('id',$id)->first();
+        $jobApp->is_shortlisted = 4;
+        return back()->with('success', trans('Job Completion Confirmed'));
+    }
+
+
+
     public function registerJobSeeker(){
         $title = __('app.register_job_seeker');
         return view('register-job-seeker', compact('title'));

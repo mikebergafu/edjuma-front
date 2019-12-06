@@ -30,6 +30,33 @@
                             @if( ! empty($application->job->employer->company))
                                 <p>{{$application->job->employer->company}}</p>
                             @endif
+
+                            @if($application->is_shortlisted == 1)
+                                    <p class="bg-warning">Shortlisted</p>
+
+                            @elseif($application->is_shortlisted == 2)
+                                    <p class="bg-success">Hired</p>
+                            @elseif($application->is_shortlisted == 3)
+                                    <p class="bg-danger">Cancelled</p>
+
+                            @elseif($application->is_shortlisted == 4)
+                                <p class="bg-success">Job Done</p>
+                            @else
+                                    <p class="bg-primary">Pending Approval</p>
+                            @endif
+
+                                <p>Pending Employers Approval</p>
+
+
+                            @if($application->is_shortlisted == 2)
+                            <a class="btn btn-success">Job Done</a>
+                            @endif
+
+                            @if($application->is_shortlisted == 4)
+                            <a href="{{route('applied_done',$application->id)}}" class="btn btn-info">Cancel Job</a>
+                            @else
+                            <a href="{{route('applied_cancelled',$application->id)}}" class="btn btn-danger">Cancel Job</a>
+                            @endif
                         </td>
 
                     </tr>

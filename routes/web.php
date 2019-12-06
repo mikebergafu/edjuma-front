@@ -171,6 +171,8 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'dashboard'], function(){
 
     Route::group(['prefix'=>'u'], function(){
         Route::get('applied-jobs', 'UserController@appliedJobs')->name('applied_jobs');
+        Route::get('applied-done/{id}', 'UserController@jobDone')->name('applied_done');
+        Route::get('applied-cancel/{id}', 'UserController@jobCancelled')->name('applied_cancelled');
         Route::get('profile', 'UserController@profile')->name('profile');
         Route::get('profile/edit', 'UserController@profileEdit')->name('profile_edit');
         Route::post('profile/edit', 'UserController@profileEditPost');
