@@ -11,9 +11,27 @@
 |
 */
 
+use App\Jobs\SendRegisterEmail;
+use App\Mail\RegisterMail;
+use Illuminate\Support\Facades\Mail;
+
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
+//Berg Test
+Route::get('/test-email', function (){
+
+    dispatch(new SendRegisterEmail(
+            [
+                'name' => 'B',
+                'email' => 'mikebergafu@gmail.com',
+                'message' => 'You registration has been successful. Thank you',
+                'subject' => 'Edjuma Jobs: Registration Notification',
+            ]
+        ));
+    return ' Email';
+
+})->name('bergy');
 Route::get('clear', 'HomeController@clearCache')->name('clear_cache');
 
 Route::get('new-register', 'HomeController@newRegister')->name('new_register');

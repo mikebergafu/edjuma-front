@@ -2,6 +2,7 @@
 
 namespace Illuminate\Auth\Events;
 
+use App\Jobs\SendRegisterEmail;
 use Illuminate\Queue\SerializesModels;
 
 class Registered

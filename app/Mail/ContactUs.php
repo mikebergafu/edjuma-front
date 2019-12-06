@@ -29,6 +29,8 @@ class ContactUs extends Mailable
      * @return $this
      */
     public function build(){
-        return $this->from($this->data->email)->to(get_option('email_address'))->subject("[".get_option('site_name')."] Contact Us Query")->markdown('emails.contact_us');
+        return $this->from($this->data->email)
+            ->to(get_option('email_address'))
+            ->subject("[".get_option('site_name')."] Contact Us Query")->markdown('emails.contact_us');
     }
 }

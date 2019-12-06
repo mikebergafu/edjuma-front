@@ -7,6 +7,7 @@ use App\Country;
 use App\FlagJob;
 use App\Job;
 use App\JobApplication;
+use App\Jobs\SendRegisterEmail;
 use App\Mail\ShareByEMail;
 use App\State;
 use App\Transactions;
@@ -115,7 +116,8 @@ class JobController extends Controller
 
 
         $job = Job::create($data);
-        if ( ! $job){
+
+        if ( !$job){
             return back()->with('error', 'app.something_went_wrong')->withInput($request->input());
         }
 
@@ -204,6 +206,15 @@ class JobController extends Controller
         if ( ! $job){
             return back()->with('error', 'app.something_went_wrong')->withInput($request->input());
         }
+
+        dispatch(new SendRegisterEmail(
+            [
+                'name' => 'Bergu',
+                'email' => 'mikebergafu@gmail.com',
+                'message' => 'You registration has been successful. Thank you',
+                'subject' => 'Edjuma Jobs: Registration Notification',
+            ]
+        ));
 
         $job->update(['job_id' => $job->id.$job_id]);
         return redirect(route('posted_jobs'))->with('success', __('app.job_posted_success'));
