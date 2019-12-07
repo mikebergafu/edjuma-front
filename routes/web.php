@@ -115,6 +115,7 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'dashboard'], function(){
 
             Route::get('applicant', 'UserController@employerApplicant')->name('employer_applicant');
             Route::get('shortlisted', 'UserController@shortlistedApplicant')->name('shortlisted_applicant');
+            Route::get('hiredapplicant', 'UserController@hiredApplicant')->name('hired_applicant');
             Route::get('applicant/{application_id}/shortlist', 'UserController@makeShortList')->name('make_short_list');
 
             Route::get('profile', 'UserController@employerProfile')->name('employer_profile');
