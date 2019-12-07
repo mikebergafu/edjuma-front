@@ -332,7 +332,7 @@ class UserController extends Controller
 
     public function makeShortList($application_id){
         $applicant = JobApplication::find($application_id);
-        $applicant->is_shortlisted = 1;
+        $applicant->is_shortlisted = 2;
         $applicant->save();
         return back()->with('success', __('app.success'));
     }

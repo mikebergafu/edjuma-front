@@ -37,7 +37,11 @@
                                 @if( ! $application->is_shortlisted)
                                     <a href="{{route('make_short_list', $application->id)}}" class="btn btn-success"><i class="la la-user-plus"></i> @lang('app.shortlist') </a>
                                 @else
-                                    @lang('app.shortlisted')
+                                    <a class="d-flex p-2 col-example btn btn-success mb-2 ">Shorlisted</a>
+
+                                    @if($application->is_shortlisted == 1)
+                                        <a href="{{route('make_hired', $application->id)}}" class="d-flex p-2 col-example btn btn-secondary mb-2 ">Hire Applicant</a>
+                                    @endif
                                 @endif
                             </td>
 

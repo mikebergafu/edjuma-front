@@ -36,8 +36,17 @@
                             <td>
                                 @if( ! $application->is_shortlisted)
                                     <a href="{{route('make_short_list', $application->id)}}" class="btn btn-success"><i class="la la-user-plus"></i> @lang('app.shortlist') </a>
+                                @elseif($application->is_shortlisted == 2)
+                                <p class="d-flex p-2 col-example btn btn-success mb-2 ">Hired</p>
+
+                                    @if($application->is_shortlisted == 4)
+                                    <a class="d-flex p-2 col-example btn btn-success mb-2 ">Work Done Approved</a>
+                                    @else
+                                    <a href="{{route('make_short_list', $application->id)}}" class="d-flex p-2 col-example btn btn-secondary mb-2 ">Approve Work Done</a>
+                                    @endif
+
                                 @else
-                                    @lang('app.shortlisted')
+                                    <p class="d-flex p-2 col-example btn btn-secondary mb-2 ">Shortlisted</p>
                                 @endif
                             </td>
 
