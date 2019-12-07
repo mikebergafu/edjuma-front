@@ -30,8 +30,10 @@ Route::get('/test-email', function (){
             ]
         ));
     return ' Email';
-
 })->name('bergy');
+
+
+
 Route::get('clear', 'HomeController@clearCache')->name('clear_cache');
 
 Route::get('new-register', 'HomeController@newRegister')->name('new_register');
@@ -189,6 +191,9 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'dashboard'], function(){
 
     Route::group(['prefix'=>'u'], function(){
         Route::get('applied-jobs', 'UserController@appliedJobs')->name('applied_jobs');
+        Route::get('show-hired', 'UserController@showHiredJobs')->name('show_hired');
+        Route::get('show-completed', 'UserController@showCompletedJobs')->name('show_completed');
+        Route::get('show-cancelled', 'UserController@showCancelledJobs')->name('show_cancelled');
         Route::get('applied-done/{id}', 'UserController@jobDone')->name('applied_done');
         Route::get('applied-cancel/{id}', 'UserController@jobCancelled')->name('applied_cancelled');
         Route::get('profile', 'UserController@profile')->name('profile');

@@ -63,8 +63,8 @@
                         <div class="card boxshadow">
                             <div class="card-body">
                                 <h3 class="card-title ">Hired Jobs</h3>
-                                <h2 class="card-text"> <span style=" color: #1d643b">10</span> Jobs </h2>
-                                <a href="#!" class="btn btn-success">View All</a>
+                                <h2 class="card-text"> <span style=" color: #1d643b">{{\App\helpers\Controls::countHiredJobs()}}</span> Jobs </h2>
+                                <a href="{{route('show_hired')}}" class="btn btn-success">View All</a>
                             </div>
                         </div>
                     </div>
@@ -73,8 +73,8 @@
                         <div class="card boxshadow">
                             <div class="card-body">
                                 <h3 class="card-title ">Completed Jobs</h3>
-                                <h2 class="card-text"> <span style=" color: #1d643b">10</span> Jobs </h2>
-                                <a href="#!" class="btn btn-success">View All</a>
+                                <h2 class="card-text"> <span style=" color: #1d643b">{{\App\helpers\Controls::countCompletedJobs()}}</span> Jobs </h2>
+                                <a href="{{route('show_completed')}}" class="btn btn-success">View All</a>
                             </div>
                         </div>
                     </div>
@@ -83,8 +83,8 @@
                         <div class="card boxshadow">
                             <div class="card-body">
                                 <h3 class="card-title ">Cancelled Jobs</h3>
-                                <h2 class="card-text"> <span style=" color: #1d643b">10</span> Jobs </h2>
-                                <a href="#!" class="btn btn-danger">View All</a>
+                                <h2 class="card-text"> <span style=" color: #1d643b">{{\App\helpers\Controls::countCancelledJobs()}}</span> Jobs </h2>
+                                <a href="{{route('show_cancelled')}}" class="btn btn-danger">View All</a>
                             </div>
                         </div>
                     </div>
