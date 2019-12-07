@@ -107,12 +107,12 @@ $user = Auth::user();
                                 </a>
                             </li>
 
-                            <li class="{{request()->is('dashboard/u/applied-jobs*')? 'active' : ''}}">
+                            {{--<li class="{{request()->is('dashboard/u/applied-jobs*')? 'active' : ''}}">
                                 <a href="{{route('applied_jobs')}}" class="list-group-item-action active">
                                     <span class="sidebar-icon"><i class="la la-list-alt"></i> </span>
                                     <span class="title">@lang('app.applied_jobs')</span>
                                 </a>
-                            </li>
+                            </li>--}}
 
                             @if($user->is_admin())
 
@@ -130,7 +130,7 @@ $user = Auth::user();
                             <li class="{{request()->is('dashboard/employer*')? 'active' : ''}}">
                                 <a href="#" class="list-group-item-action">
                                     <span class="sidebar-icon"><i class="la la-black-tie"></i> </span>
-                                    <span class="title">@lang('Jobs')</span>
+                                    <span class="title">@lang('My Posted Jobs')</span>
                                     <span class="arrow"><i class="la la-arrow-right"></i> </span>
                                 </a>
 
@@ -140,6 +140,23 @@ $user = Auth::user();
                                     <li><a class="sidebar-link" href="{{route('employer_applicant')}}">@lang('app.applicants')</a></li>
                                     <li><a class="sidebar-link" href="{{route('shortlisted_applicant')}}">@lang('app.shortlist')</a></li>
                                     <li><a class="sidebar-link" href="{{route('employer_profile')}}">@lang('app.profile')</a></li>
+                                </ul>
+                            </li>
+
+
+
+                            <li class="{{request()->is('dashboard/u/applied-jobs*')? 'active' : ''}}">
+                                <a class="list-group-item-action active">
+                                    <span class="sidebar-icon"><i class="la la-list-alt"></i> </span>
+                                    <span class="title">@lang('My Job Applications')</span>
+                                    <span class="arrow"><i class="la la-arrow-right"></i> </span>
+                                </a>
+
+                                <ul class="dropdown-menu" style="display: none;">
+                                    <li><a class="sidebar-link" href="{{route('applied_jobs')}}">Applied Jobs</a></li>
+                                    <li><a class="sidebar-link" href="{{route('show_hired')}}">Hired Jobs</a></li>
+                                    <li><a class="sidebar-link" href="{{route('show_completed')}}">Completed Jobs</a></li>
+                                    <li><a class="sidebar-link" href="{{route('show_cancelled')}}">Cancelled Jobs</a></li>
                                 </ul>
                             </li>
 

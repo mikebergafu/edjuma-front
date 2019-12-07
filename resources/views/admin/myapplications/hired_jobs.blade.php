@@ -11,7 +11,7 @@
                     <th>@lang('app.employer')</th>
                 </tr>
 
-                @foreach($applications as $application)
+                @foreach($jobs as $application)
                     <tr>
                         <td>
                             <i class="la la-user"></i> {{$application->name}}
@@ -31,27 +31,35 @@
                                 <p>{{$application->job->employer->company}}</p>
                             @endif
 
-                            @if($application->is_shortlisted == 1)
-                                <p class="d-flex p-2 col-example btn btn-secondary mb-2 ">Shortlisted</p>
-                            @else
-                                <p class="d-flex p-2 col-example btn btn-info mb-2">Pending Approval</p>
+                            @if($application->is_shortlisted == 2)
+                                <p class="d-flex p-2 col-example btn btn-success mb-2">Hired</p>
                             @endif
 
 
-                            @if($application->is_shortlisted == 1)
-                            <a href="{{route('applied_cancelled',$application->id)}}" class="btn btn-danger">Cancel Job</a>
-                            @else
-                            <a href="{{route('applied_cancelled',$application->id)}}" class="btn btn-danger">Cancel Job</a>
+
+
+                            @if($application->is_shortlisted == 4)
+                                <a href="#" class="btn btn-dark">Pending Employers Approval</a>
+                            @elseif($application->is_shortlisted == 2)
+                                <a href="#" class="btn btn-dark">Pending Employers Approval</a>
+                            @endif
+
+
+                            @if($application->is_shortlisted == 2)
+                                <a href="{{route('applied_done',$application->id)}}" class="btn btn-dark">Confirm Job Done</a>
+                            @endif
+
+                            @if($application->is_shortlisted == 2)
+                                <a href="#" class="btn btn-info">Cancel Job</a>
                             @endif
                         </td>
-
                     </tr>
                 @endforeach
 
             </table>
 
 
-            {!! $applications->links() !!}
+            {!! $jobs->links() !!}
 
         </div>
     </div>

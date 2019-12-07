@@ -60,7 +60,7 @@ class UserController extends Controller
     public function appliedJobs(){
         $title = __('app.applicant');
         $user_id = Auth::user()->id;
-        $applications = JobApplication::whereUserId($user_id)->orderBy('id', 'desc')->paginate(20);
+        $applications = JobApplication::whereUserId($user_id)->where([['is_shortlisted','>=', 0],['is_shortlisted','<=', 1]])->orderBy('id', 'desc')->paginate(20);
 
         return view('admin.applied_jobs', compact('title', 'applications'));
     }
@@ -68,14 +68,35 @@ class UserController extends Controller
     public function jobDone($id){
         $jobApp =  JobApplication::where('id',$id)->first();
         $jobApp->is_shortlisted = 4;
+        $jobApp->save();
         return back()->with('success', trans('Job Completion Confirmed'));
     }
 
     public function jobCancelled($id){
         $jobApp =  JobApplication::where('id',$id)->first();
-        $jobApp->is_shortlisted = 4;
+        $jobApp->is_shortlisted = 3;
+        $jobApp->save();
         return back()->with('success', trans('Job Completion Confirmed'));
     }
+
+    public function showHiredJobs(){
+        $data['title'] = __('Hired Jobs');
+        $data['jobs'] = JobApplication::where('user_id',Auth::user()->id)->where('is_shortlisted',2)->orderBy('id', 'desc')->paginate(5);
+        return view('admin.myapplications.hired_jobs',$data);
+    }
+
+    public function showCompletedJobs(){
+        $data['title'] = __('Completed Jobs');
+        $data['jobs'] = JobApplication::where('user_id',Auth::user()->id)->where('is_shortlisted',4)->orderBy('id', 'desc')->paginate(5);
+        return view('admin.myapplications.completed_jobs',$data);
+    }
+
+    public function showCancelledJobs(){
+        $data['title'] = __('Cancelled Jobs');
+        $data['jobs'] = JobApplication::where('user_id',Auth::user()->id)->where('is_shortlisted',3)->orderBy('id', 'desc')->paginate(5);
+        return view('admin.myapplications.cancelled_jobs',$data);
+    }
+
 
 
 
