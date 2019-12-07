@@ -139,6 +139,7 @@ $user = Auth::user();
                                     <li><a class="sidebar-link" href="{{route('posted_jobs')}}">@lang('app.posted_jobs')</a></li>
                                     <li><a class="sidebar-link" href="{{route('employer_applicant')}}">@lang('app.applicants')</a></li>
                                     <li><a class="sidebar-link" href="{{route('shortlisted_applicant')}}">@lang('app.shortlist')</a></li>
+                                    <li><a class="sidebar-link" href="{{route('hired_applicant')}}">@lang('Hired')</a></li>
                                     <li><a class="sidebar-link" href="{{route('employer_profile')}}">@lang('app.profile')</a></li>
                                 </ul>
                             </li>

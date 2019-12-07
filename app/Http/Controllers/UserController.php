@@ -345,6 +345,14 @@ class UserController extends Controller
         return view('admin.applicants', compact('title', 'applications'));
     }
 
+    public function hiredApplicant(){
+        $title = __('Hired Applicants');
+        $employer_id = Auth::user()->id;
+        $applications = JobApplication::whereEmployerId($employer_id)->whereIsShortlisted(2)->orderBy('id', 'desc')->paginate(20);
+
+        return view('admin.hiredapplicants', compact('title', 'applications'));
+    }
+
 
     public function profile(){
         $title = trans('app.profile');

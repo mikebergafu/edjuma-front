@@ -5,6 +5,7 @@ namespace App\helpers;
 use App\Job;
 use App\JobApplication;
 use App\User;
+use Illuminate\Support\Facades\Auth;
 
 class Controls
 {
@@ -14,15 +15,15 @@ class Controls
     }
 
     public static function countHiredJobs(){
-        return $hired = JobApplication::where('is_shortlisted',2)->count();
+        return $hired = JobApplication::where('user_id',Auth::user()->id)->where('is_shortlisted',2)->count();
     }
 
     public static function countCompletedJobs(){
-        return $hired = JobApplication::where('is_shortlisted',4)->count();
+        return $hired = JobApplication::where('user_id',Auth::user()->id)->where('is_shortlisted',4)->count();
     }
 
     public static function countCancelledJobs(){
-        return $hired = JobApplication::where('is_shortlisted',3)->count();
+        return $hired = JobApplication::where('user_id',Auth::user()->id)->where('is_shortlisted',3)->count();
     }
 
     public static function getEmployerName($emp_id){
