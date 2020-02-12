@@ -1394,11 +1394,13 @@ footer .form-control::-webkit-input-placeholder {
         font-size: 82px;
     }
 
+    /*
     footer {
         position: fixed;
         bottom: 0;
         width: 100vw;
     }
+    */
 
     .social li {
         width: 20%;
@@ -1411,11 +1413,13 @@ footer .form-control::-webkit-input-placeholder {
 }
 
 
+/*
 @media only screen and (max-width:  768px) {
 
     footer {
         position: inherit;
     }
 }
+*/
 
 
