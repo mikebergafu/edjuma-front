@@ -1,462 +1,98 @@
-@extends('layouts.header')
-@section('title')
-    Manage Jobs - Edjuma.com
-@endsection
-<style>
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-</style>
+        <title>Laravel</title>
 
-{{--@section('styles')
-    <link href="{{asset('vendor/datatables/dataTables.bootstrap4.css')}}" rel="stylesheet">
-    <script src="{{ asset('js/app.js') }}" defer></script>
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-@endsection--}}
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
 
-@section('content')
+        <!-- Styles -->
+        <style>
+            html, body {
+                background-color: #fff;
+                color: #636b6f;
+                font-family: 'Nunito', sans-serif;
+                font-weight: 200;
+                height: 100vh;
+                margin: 0;
+            }
 
+            .full-height {
+                height: 100vh;
+            }
 
+            .flex-center {
+                align-items: center;
+                display: flex;
+                justify-content: center;
+            }
 
-    <div id="banner" class="with-transparent-header parallax background" style="background-image: url(./edjuma/images/banner-home.jpg)" data-img-width="2000" data-img-height="1330" data-diff="300">
-        <div class="container">
-            <div class="sixteen columns">
+            .position-ref {
+                position: relative;
+            }
 
-                <div style="margin-top: -150px;" class="search-container">
+            .top-right {
+                position: absolute;
+                right: 10px;
+                top: 18px;
+            }
 
-                    <!-- Form -->
-                    <h2>Find Job</h2>
+            .content {
+                text-align: center;
+            }
 
-                    <input type="text" id="job_title" name="job_title" class="ico-01" placeholder="job title, keywords or company name" value="" required/>
-                    <input type="text" id="job_city" name="job_city" class="ico-02" placeholder="city, province or region" value="" required/>
-                    <button id="search-job"><i class="fa fa-search"></i></button>
+            .title {
+                font-size: 84px;
+            }
 
-                    <!-- Browse Jobs -->
-                    <div class="browse-jobs">
-                        Browse job offers by <a href="browse-categories.html"> category</a> or <a href="#">location</a>
-                    </div>
-                </div>
+            .links > a {
+                color: #636b6f;
+                padding: 0 25px;
+                font-size: 13px;
+                font-weight: 600;
+                letter-spacing: .1rem;
+                text-decoration: none;
+                text-transform: uppercase;
+            }
 
-                <section style="margin-top: -130px;">
-                    <div class="row">
-                        <div class="listings-container">
+            .m-b-md {
+                margin-bottom: 30px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="flex-center position-ref full-height">
+            @if (Route::has('login'))
+                <div class="top-right links">
+                    @auth
+                        <a href="{{ url('/home') }}">Home</a>
+                    @else
+                        <a href="{{ route('login') }}">Login</a>
 
-                            @if(count($jobs1)>0)
-                                @foreach($jobs1 as $job)
-                                    <a  href="{{route('jobs.apply.form',$job->id)}}" style=" text-decoration: none;" data-confirm="Click OK to Continue with Job Application " id="confirm" class="boxshadow confirm listing part-time bg-white">
-                                        <div class="listing-logo">
-                                            {{-- <img src="{{asset('edjuma/images/job-list-logo-04.png')}}" alt="">--}}
-                                            <i style="font-size: 50px; font-weight: bold;" class="ln ln-icon-}}  text-success"></i>
-                                        </div>
-                                        <div class="listing-title">
-                                            <h4 style="font-weight: bolder;" >{{$job->job_title}}
-                                                <div class="clearfix"></div>
-                                                <small>Category: </small><small style="color: #26ae61">{{$job->name}} </small>
-                                            </h4>
-                                            <h6 class="text-dark" >{{$job->job_description}}</h6>
-                                            <ul class="listing-icons">
-                                                <li><i class="ln ln-icon-Map2"></i>{{$job->job_location}}</li>
-                                                <li><i class="ln ln-icon-Money-2"></i> {{$job->salary."/".$job->salary_frequency}}</li>
-                                                <li><div class="listing-date">{{\Carbon\Carbon::parse($job->created_at)->diffForHumans()}}</div></li>
-                                                <li><div class="listing-date new">Apply Now</div></li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                @endforeach
-                                    {{$jobs1->links()}}
-                            @endif
-                        </div>
-
-                        <div class="listings-container">
-                            <div id="show_result">
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-            </div>
-
-        </div>
-    </div>
-
-
-
-    <!-- Content
-    ================================================== -->
-
-    <!-- Categories -->
-    <div class="container">
-        <div class="sixteen columns">
-            <h3 class="margin-bottom-20 margin-top-10">Popular Categories</h3>
-
-            <!-- Popular Categories -->
-            @if($jobs->count() > 0)
-                <div class="categories-boxes-container">
-
-                    <!-- Box -->
-                    <a href="{{route('free.jobs.by.category',[$job_categories[0]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                        <i class="ln ln-icon-Laptop-Phone"></i>
-                        <h4>{{$job_categories[0]->name}}</h4>
-                        <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[0]->id)}}</span>
-                    </a>
-
-                    <!-- Box -->
-                    <a href="{{route('free.jobs.by.category',[$job_categories[1]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                        <i class="ln ln-icon-Cash-register2"></i>
-                        <h4>{{$job_categories[1]->name}}</h4>
-                        <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[1]->id)}}</span>
-                    </a>
-
-                    <!-- Box -->
-                    <a href="{{route('free.jobs.by.category',[$job_categories[2]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                        <i class="ln ln-icon-Forest"></i>
-                        <h4>{{$job_categories[2]->name}}</h4>
-                        <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[2]->id)}}</span>
-                    </a>
-
-                    <!-- Box -->
-                    <a href="{{route('free.jobs.by.category',[$job_categories[3]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                        <i class="ln ln-icon-Worker-Clothes"></i>
-                        <h4>{{$job_categories[3]->name}}</h4>
-                        <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[3]->id)}}</span>
-                    </a>
-
-                    <!-- Box -->
-                    <a href="{{route('free.jobs.by.category',[$job_categories[4]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                        <i class="ln ln-icon-Medical-Sign"></i>
-                        <h4>{{$job_categories[4]->name}}</h4>
-                        <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[4]->id)}}</span>
-                    </a>
-
-                    <!-- Box -->
-                    <a href="{{route('free.jobs.by.category',[$job_categories[5]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                        <i class="ln ln-icon-Plates"></i>
-                        <h4>{{$job_categories[5]->name}}</h4>
-                        <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[5]->id)}}</span>
-                    </a>
-
-                    <!-- Box -->
-                    <a href="{{route('free.jobs.by.category',[$job_categories[6]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                        <i class="ln ln-icon-Car"></i>
-                        <h4>{{$job_categories[6]->name}}</h4>
-                        <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[6]->id)}}</span>
-                    </a>
-
-                    <!-- Box -->
-                    <a href="{{route('free.jobs.by.category',[$job_categories[7]->id,\Faker\Provider\Uuid::uuid()])}}" class="category-small-box">
-                        <i class="ln ln-icon-Arrow-Next"></i>
-                        <h4>{{$job_categories[7]->name}}</h4>
-                        <span>{{\App\Helpers\Sitso::getCategoryJobCount($job_categories[7]->id)}}</span>
-                    </a>
-
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}">Register</a>
+                        @endif
+                    @endauth
                 </div>
             @endif
-            <div class="clearfix"></div>
-            <div class="margin-top-30"></div>
 
-            <a href="browse-categories.html" class="button centered">Browse All Categories</a>
-            <div class="margin-bottom-55"></div>
-        </div>
-    </div>
-
-
-    <div class="container">
-
-        <!-- Recent Jobs -->
-        <div class="eleven columns">
-            <div class="padding-right">
-                <h3 class="margin-bottom-25">Recent Jobs</h3>
-                <div class="listings-container">
-                    @if($jobs->count() > 0)
-                        {{-- @foreach($jobs as $job)
-                             <!-- Listing -->
-                                 @if($job->name=="Ground & Landscaping")
-                                     <a href="{{route('jobs.apply.form',$job->id)}}" class="listing internship">
-                                         @elseif($job->name=="Vehicle Maintenance")
-                                             <a href="{{route('jobs.apply.form',$job->id)}}" class="listing full-time">
-                                                 @elseif($job->name=="Web, Software & IT")
-                                                     <a href="{{route('jobs.apply.form',$job->id)}}" class="listing freelance">
-                                                         @else
-                                                             <a href="{{route('jobs.apply.form',$job->id)}}" class="listing part-time">
-                                                                 @endif
-
-                                     <div class="listing-logo">
-                                         <img src="{{asset('edjuma/images/job-list-logo-04.png')}}" alt="">
-                                     </div>
-                                     <div class="listing-title">
-                                         <h4>{{$job->job_title}}
-                                             <small>Category: </small><small style="color: #26ae61">{{$job->name}} </small>
-                                         </h4>
-                                         <h6>{{$job->job_description}}</h6>
-                                         <ul class="listing-icons">
-                                             <li><i class="ln ln-icon-Map2"></i>{{$job->job_location}}</li>
-                                             <li><i class="ln ln-icon-Money-2"></i> {{$job->salary."/".$job->salary_frequency}}</li>
-                                             <li><div class="listing-date">{{\Carbon\Carbon::parse($job->created_at)->diffForHumans()}}</div></li>
-                                             <li><div class="listing-date new">Apply Now</div></li>
-                                         </ul>
-                                     </div>
-                                 </a>
-                         @endforeach--}}
-                    @endif
+            <div class="content">
+                <div class="title m-b-md">
+                    Laravel
                 </div>
 
-                <a href="browse-jobs.html" class="button centered"><i class="fa fa-plus-circle"></i> Show More Jobs</a>
-                <div class="margin-bottom-55"></div>
-            </div>
-        </div>
-
-        <!-- Job Spotlight -->
-        <div class="five columns">
-            <h3 class="margin-bottom-5">Job Spotlight</h3>
-
-            <!-- Navigation -->
-            <div class="showbiz-navigation">
-                <div id="showbiz_left_1" class="sb-navigation-left"><i class="fa fa-angle-left"></i></div>
-                <div id="showbiz_right_1" class="sb-navigation-right"><i class="fa fa-angle-right"></i></div>
-            </div>
-            <div class="clearfix"></div>
-
-            <!-- Showbiz Container -->
-            <div id="job-spotlight" class="showbiz-container">
-                <div class="showbiz" data-left="#showbiz_left_1" data-right="#showbiz_right_1" data-play="#showbiz_play_1" >
-                    <div class="overflowholder">
-
-                        <ul>
-
-                            <li>
-                                <div class="job-spotlight">
-                                    <a href="#"><h4>Social Media: Advertising Coordinator <span class="part-time">Part-Time</span></h4></a>
-                                    <span><i class="fa fa-briefcase"></i> Mates</span>
-                                    <span><i class="fa fa-map-marker"></i> New York</span>
-                                    <span><i class="fa fa-money"></i> $20 / hour</span>
-                                    <p>As advertising & content coordinator, you will support our social media team in producing high quality social content for a range of media channels.</p>
-                                    <a href="job-page.html" class="button">Apply For This Job</a>
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="job-spotlight">
-                                    <a href="#"><h4>Prestashop / WooCommerce Product Listing <span class="freelance">Freelance</span></h4></a>
-                                    <span><i class="fa fa-briefcase"></i> King</span>
-                                    <span><i class="fa fa-map-marker"></i> London</span>
-                                    <span><i class="fa fa-money"></i> $25 / hour</span>
-                                    <p>Etiam suscipit tellus ante, sit amet hendrerit magna varius in. Pellentesque lorem quis enim venenatis pellentesque.</p>
-                                    <a href="job-page.html" class="button">Apply For This Job</a>
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="job-spotlight">
-                                    <a href="#"><h4>Logo Design <span class="freelance">Freelance</span></h4></a>
-                                    <span><i class="fa fa-briefcase"></i> Hexagon</span>
-                                    <span><i class="fa fa-map-marker"></i> Sydney</span>
-                                    <span><i class="fa fa-money"></i> $10 / hour</span>
-                                    <p>Proin ligula neque, pretium et ipsum eget, mattis commodo dolor. Etiam tincidunt libero quis commodo.</p>
-                                    <a href="job-page.html" class="button">Apply For This Job</a>
-                                </div>
-                            </li>
-
-
-                        </ul>
-                        <div class="clearfix"></div>
-
-                    </div>
-                    <div class="clearfix"></div>
+                <div class="links">
+                    <a href="https://laravel.com/docs">Documentation</a>
+                    <a href="https://laracasts.com">Laracasts</a>
+                    <a href="https://laravel-news.com">News</a>
+                    <a href="https://nova.laravel.com">Nova</a>
+                    <a href="https://forge.laravel.com">Forge</a>
+                    <a href="https://github.com/laravel/laravel">GitHub</a>
                 </div>
             </div>
-
         </div>
-    </div>
-
-
-    <section class="fullwidth-testimonial margin-top-15">
-
-        <!-- Info Section -->
-        <div class="container">
-            <div class="sixteen columns">
-                <h3 class="headline centered">
-                    What Our Users Say 😍
-                    <span class="margin-top-25">We collect reviews from our users so you can get an honest opinion of what an experience with our website are really like!</span>
-                </h3>
-            </div>
-        </div>
-        <!-- Info Section / End -->
-
-        <!-- Testimonials Carousel -->
-        <div class="fullwidth-carousel-container margin-top-20">
-            <div class="testimonial-carousel testimonials">
-
-                <!-- Item -->
-                <div class="fw-carousel-review">
-                    <div class="testimonial-box">
-                        <div class="testimonial">Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps. Nanotechnology immersion along the information highway will close.</div>
-                    </div>
-                    <div class="testimonial-author">
-                        <img src="{{asset('edjuma/images/resumes-list-avatar-03.png')}}" alt="">
-                        <h4>Tom Baker <span>HR Specialist</span></h4>
-                    </div>
-                </div>
-
-                <!-- Item -->
-                <div class="fw-carousel-review">
-                    <div class="testimonial-box">
-                        <div class="testimonial">Bring to the table win-win survival strategies to ensure proactive domination. At the end of the day, going forward, a new normal that has evolved from generation is on the runway heading towards a streamlined cloud content.</div>
-                    </div>
-                    <div class="testimonial-author">
-                        <img src="{{asset('edjuma/images/resumes-list-avatar-02.png')}}" alt="">
-                        <h4>Jennie Smith <span>Jobseeker</span></h4>
-                    </div>
-                </div>
-
-                <!-- Item -->
-                <div class="fw-carousel-review">
-                    <div class="testimonial-box">
-                        <div class="testimonial">Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view.</div>
-                    </div>
-                    <div class="testimonial-author">
-                        <img src="{{asset('edjuma/images/resumes-list-avatar-01.png')}}" alt="">
-                        <h4>Jack Paden <span>Jobseeker</span></h4>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <!-- Testimonials Carousel / End -->
-
-    </section>
-
-
-    <!-- Flip banner -->
-    <a href="browse-jobs.html" class="flip-banner margin-bottom-55" data-background="edjuma/images/all-categories-photo.jpg" data-color="#26ae61" data-color-opacity="0.93">
-        <div class="flip-banner-content">
-            <h2 class="flip-visible">Step inside and see for yourself!</h2>
-            <h2 class="flip-hidden">Get Started <i class="fa fa-angle-right"></i></h2>
-        </div>
-    </a>
-    <!-- Flip banner / End -->
-
-
-    <!-- Recent Posts -->
-    <div class="container">
-        <div class="sixteen columns">
-            <h3 class="margin-bottom-25">Recent Posts</h3>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-
-                <!-- Post #1 -->
-                <div class="recent-post">
-                    <div class="recent-post-img"><a href="blog-single-post.html"><img src="{{asset('edjuma/images/recent-post-01.jpg')}}" alt=""></a><div class="hover-icon"></div></div>
-                    <a href="blog-single-post.html"><h4>Hey Job Seeker, It’s Time To Get Up And Get Hired</h4></a>
-                    <div class="meta-tags">
-                        <span>October 10, 2015</span>
-                        <span><a href="#">0 Comments</a></span>
-                    </div>
-                    <p>The world of job seeking can be all consuming. From secretly stalking the open reqs page of your dream company to sending endless applications.</p>
-                    <a href="blog-single-post.html" class="button">Read More</a>
-                </div>
-
-            </div>
-
-
-            <div class="col-md-4">
-
-                <!-- Post #2 -->
-                <div class="recent-post">
-                    <div class="recent-post-img"><a href="blog-single-post.html"><img src="{{asset('edjuma/images/recent-post-02.jpg')}}" alt=""></a><div class="hover-icon"></div></div>
-                    <a href="blog-single-post.html"><h4>How to "Woo" a Recruiter and Land Your Dream Job</h4></a>
-                    <div class="meta-tags">
-                        <span>September 12, 2015</span>
-                        <span><a href="#">0 Comments</a></span>
-                    </div>
-                    <p>Struggling to find your significant other the perfect Valentine’s Day gift? If I may make a suggestion: woo a recruiter. </p>
-                    <a href="blog-single-post.html" class="button">Read More</a>
-                </div>
-
-            </div>
-
-            <div class="col-md-4">
-
-                <!-- Post #3 -->
-                <div class="recent-post">
-                    <div class="recent-post-img"><a href="blog-single-post.html"><img src="{{asset('edjuma/images/recent-post-03.jpg')}}" alt=""></a><div class="hover-icon"></div></div>
-                    <a href="blog-single-post.html"><h4>11 Tips to Help You Get New Clients Through Cold Calling</h4></a>
-                    <div class="meta-tags">
-                        <span>August 27, 2015</span>
-                        <span><a href="#">0 Comments</a></span>
-                    </div>
-                    <p>If your dream employer appears on this list, you’re certainly in good company. But it also means you’re up for some intense competition.</p>
-                    <a href="blog-single-post.html" class="button">Read More</a>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-    <script>
-        $(document).ready(function () {
-
-            $(document).on('click','#search-job',function (e) {
-                //console.log(job_title,job_city);
-                var job_title = $("#job_title").val();
-                var job_city = $("#job_city").val();
-
-                var token = "{{csrf_token()}}";
-
-                $.ajax({
-                    type: "POST",
-                    url:"{{route('search')}}",
-                    data:{
-                        'job_title': job_title ,
-                        'job_city': job_city ,
-                        '_token' : token
-                    },
-                    success:function(data){
-                        //console.log(data);
-                        $("#show_result").html(data);
-                    }
-                });
-
-            });
-
-
-
-
-
-        });
-
-    </script>
-
-
-
-
-@endsection
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    </body>
+</html>

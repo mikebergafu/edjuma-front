@@ -1,162 +1,449 @@
-@extends('layouts.header')
-@section('title')
-    Home - Edjuma.com
-@endsection
+@extends('layouts.theme')
+
 @section('content')
-    <!-- Titlebar
-================================================== -->
-    <div id="titlebar" style="background-image: url('{{asset('edjuma/images/bg/banner-bg.png')}}')">
+
+    <section class="main-banner" style="background:#242c36 url({{asset('assets/images/slider-01.jpg')}}) no-repeat">
         <div class="container">
-            <div class="ten columns">
-                <span>We found {{count($jobs)}} jobs matching:</span>
-                <h2>All Job Categories</h2>
-            </div>
+            <div class="caption">
+                <h2>Build Your Career</h2>
+                <form action="{{route('jobs_listing')}}"  method="get">
+                    <fieldset>
+                        <div class="col-md-4 col-sm-4 no-pad">
+                            <input type="text" class="form-control border-right" name="q" placeholder="@lang('app.job_title_placeholder')" />
+                        </div>
 
-            <div class="six columns">
-                <a href="{{route('jobs.add.form')}}" class="button">Post a Job, It’s Free!</a>
-            </div>
+                        <div class="col-md-4 col-sm-4 no-pad">
+                            <input type="text" class="form-control border-right" name="location" placeholder="@lang('app.job_location_placeholder')" />
+                        </div>
 
+                        <div class="col-md-4 col-sm-4 no-pad">
+                            <button type="submit" class="btn seub-btn" value="submit" >
+                                <i class="la la-search"></i> @lang('app.search') @lang('app.job')
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
         </div>
-    </div>
+    </section>
+    @if($regular_jobs->count())
+        <div class=" pb-5 pt-5">
 
+            <div class="container">
+                <div class="regular-job-container p-3">
 
-    <!-- Content
-    ================================================== -->
-    <div class="container">
-        <!-- Recent Jobs -->
-        <div class="row">
-            <div class="col-md-9">
-                <div class="padding-right">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="mb-3">@lang('app.new_jobs')</h4>
+                        </div>
+                    </div>
 
-                    <div class="listings-container">
-                        @foreach($jobs as $job)
-                        <!-- Listing -->
-                                   <a href="{{route('jobs.apply.form',$job->id)}}" style="text-decoration: none;" data-confirm="Click OK to Continue with Job Application " id="confirm" class="confirm listing part-time">
-                                        <div class="listing-logo">
-                                           {{-- <img src="{{asset('edjuma/images/job-list-logo-04.png')}}" alt="">--}}
-                                            <i style="font-size: 50px; font-weight: bold;" class="ln ln-icon-{{\App\Helpers\Sitso::getCategoryIcon($job->job_category)}}  text-success"></i>
+                    <div class="row">
+                        @foreach($regular_jobs as $regular_job)
+                            <div class="col-md-4  boxshadow p-4">
+                                <!-- Card -->
+                                <a style="text-decoration: none" href="{{route('job_view', $regular_job->job_slug)}}">
+                                    <div class="">
+                                        <div class="card-body">
+
+                                            <!-- Title -->
+                                            <h4 class="card-title">{!! $regular_job->job_title !!}</h4>
+                                            <!-- Text -->
+                                            <p class="card-text">
+                                                <i class="la la-map-marker"></i>
+                                                @if($regular_job->city_name)
+                                                    {!! $regular_job->city_name !!},
+                                                @endif
+                                                @if($regular_job->state_name)
+                                                    {!! $regular_job->state_name !!},
+                                                @endif
+                                                @if($regular_job->state_name)
+                                                    {!! $regular_job->country_name !!}
+                                                @endif
+                                            </p>
+                                            <!-- Button -->
+                                            <a href="{{route('job_view', $regular_job->job_slug)}}" class="btn btn-success">View Job</a>
+
                                         </div>
-                                        <div class="listing-title">
-                                            <h4 style="font-weight: bolder;" >{{$job->job_title}}
-                                                <div class="clearfix"></div>
-                                                <small>Category: </small><small style="color: #26ae61">{{$job->name}} </small>
-                                            </h4>
-                                            <h6 class="text-dark" >{{$job->job_description}}</h6>
-                                            <ul class="listing-icons">
-                                                <li><i class="ln ln-icon-Map2"></i>{{$job->job_location}}</li>
-                                                <li><i class="ln ln-icon-Money-2"></i> {{$job->salary."/".$job->salary_frequency}}</li>
-                                                <li><div class="listing-date">{{\Carbon\Carbon::parse($job->created_at)->diffForHumans()}}</div></li>
-                                                <li><div class="listing-date new">Apply Now</div></li>
-                                            </ul>
-                                        </div>
-                                   </a>
+
+                                    </div>
+                                </a>
+                                    <!-- Card -->
+
+
+
+
+                            </div>
+
                         @endforeach
+
                     </div>
-                    <div class="clearfix"></div>
-                    <div class="pagination-container">
-                        {{$jobs->links()}}
-                    </div>
+
+
                 </div>
+
             </div>
 
 
-            <!-- Widgets -->
-            <div class="col-md-3">
-
-                <!-- Sort by -->
-                <div class="widget">
-                    <h4>Sort by</h4>
-
-                    <!-- Select -->
-                    <select data-placeholder="Choose Category" class="chosen-select-no-single">
-                        <option selected="selected" value="recent">Newest</option>
-                        <option value="oldest">Oldest</option>
-                        <option value="expiry">Expiring Soon</option>
-                        <option value="ratehigh">Hourly Rate – Highest First</option>
-                        <option value="ratelow">Hourly Rate – Lowest First</option>
-                    </select>
-
-                </div>
-
-
-
-                <!-- Location -->
-                <div class="widget">
-                    <h4>Location</h4>
-
-                    <form action="#" method="get">
-                        <input type="text" name="city" id="city" placeholder="City" value=""/>
-
-                        <button class="button">Filter</button>
-                    </form>
-                </div>
-
-                <!-- Job Type -->
-                <div class="widget">
-                    <h4>Job Type</h4>
-
-                    <ul class="checkboxes">
-                        <li>
-                            <input id="check-1" type="checkbox" name="check" value="check-1" checked>
-                            <label for="check-1">Any Type</label>
-                        </li>
-                        <li>
-                            <input id="check-2" type="checkbox" name="check" value="check-2">
-                            <label for="check-2">Full-Time <span>(312)</span></label>
-                        </li>
-                        <li>
-                            <input id="check-3" type="checkbox" name="check" value="check-3">
-                            <label for="check-3">Part-Time <span>(269)</span></label>
-                        </li>
-                    </ul>
-
-                </div>
-
-                <!-- Rate/Hr -->
-                <div class="widget">
-                    <h4>Rate</h4>
-
-                    <ul class="checkboxes">
-                        <li>
-                            <input id="check-6" type="checkbox" name="check" value="check-6" checked>
-                            <label for="check-6">Any Rate</label>
-                        </li>
-                        {{\App\Helpers\Sitso::getPriceSteps()}}
-                    </ul>
-
-                </div>
-
-
-
-            </div>
-            <!-- Widgets / End -->
         </div>
+    @endif
 
 
 
-    </div>
 
-@endsection
-@section('scripts')
-    <script>
-        // Call the dataTables jQuery plugin
-        /*$(document).ready(function() {
-            alert('vvbn');
-        });*/
+    <section class="features regular-jobs-wrap">
+        <div class="container">
+            <div class="col-md-6 col-sm-6">
+                <div class="features-content bg-white">
+                    <span style="color: green" class="box1"><i class="fa fa-building"></i></span></span>
+                    <h3>@lang('app.employer')</h3>
+                    <p>@lang('app.employer_new_desc')</p>
+                    <a href="{{route('register_employer')}}" class="btn btn-success"><i
+                            class="la la-user-plus"></i> @lang('app.register_account') </a>
+                </div>
+            </div>
 
-       /* $('.confirm').on('click', function (e) {
-            alert('vvbn');
-        });*/
+            <div class="col-md-6 col-sm-6">
+                <div class="features-content bg-white">
+                    <span style="color: green" class="box1"><i class="fa fa-address-book"></i></span></span>
+                    <h3>@lang('app.job_seeker')</h3>
+                    <p>@lang('app.job_seeker_new_desc')</p>
+                    <a href="{{route('register_agent')}}" class="btn btn-success">@lang('app.register_account')</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    </script>
-    <script>
-        $('.confirm').on('click', function (e) {
-            if (confirm($(this).data('confirm'))) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        });
-    </script>
+
+    <section class="divider">
+    @if($categories->count())
+        <div class="home-categories-wrap bg-white pb-5 pt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="mb-3">@lang('app.browse_category')</h4>
+                    </div>
+                </div>
+                <div class="row">
+
+                    @foreach($categories as $category)
+                        <div class="col-md-4">
+
+                            <p>
+                                <a href="{{route('jobs_listing', ['category' => $category->id])}}"
+                                   class="category-link"><i class="la la-th-large"></i> {{$category->category_name}}
+                                    <span class="text-muted">({{$category->job_count}})</span> </a>
+                            </p>
+
+                        </div>
+
+                    @endforeach
+
+                </div>
+
+            </div>
+        </div>
+    @endif
+
+
+
+    @if($premium_jobs->count())
+
+        <div class="premium-jobs-wrap pb-5 pt-5">
+
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="mb-3">@lang('app.premium_jobs')</h4>
+                    </div>
+                </div>
+
+                <div class="row">
+                    @foreach($premium_jobs as $job)
+                        <div class="col-md-4 mb-3">
+                            <div class="premium-job-box p-3 bg-white box-shadow">
+
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-6">
+                                        <div class="premium-job-logo">
+                                            <a href="{{route('jobs_by_employer', $job->employer->company_slug)}}">
+                                                <img src="{{$job->employer->logo_url}}" class="img-fluid"/>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-8 col-sm-6">
+
+                                        <p class="job-title">
+                                            <a href="{{route('job_view', $job->job_slug)}}">{!! $job->job_title !!}</a>
+                                        </p>
+
+                                        <p class="text-muted m-0">
+                                            <a href="{{route('jobs_by_employer', $job->employer->company_slug)}}"
+                                               class="text-muted">
+                                                {{$job->employer->company}}
+                                            </a>
+                                        </p>
+
+                                        <p class="text-muted m-0">
+                                            <i class="la la-map-marker"></i>
+                                            @if($job->city_name)
+                                                {!! $job->city_name !!},
+                                            @endif
+                                            @if($job->state_name)
+                                                {!! $job->state_name !!},
+                                            @endif
+                                            @if($job->state_name)
+                                                {!! $job->country_name !!}
+                                            @endif
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    @endforeach
+                </div>
+            </div>
+
+        </div>
+    @endif
+</section>
+    <section class="counter">
+        <div class="container">
+            <div class="col-md-3 col-sm-3">
+                <div class="counter-text">
+                    <span aria-hidden="true" class="icon-briefcase"></span>
+                    <h3>1000</h3>
+                    <p>Jobs Posted</p>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-3">
+                <div class="counter-text">
+                    <span class="box1"><span aria-hidden="true" class="icon-expand"></span></span>
+                    <h3>207</h3>
+                    <p>All Companies</p>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-3">
+                <div class="counter-text">
+                    <span class="box1"><span aria-hidden="true" class="icon-profile-male"></span></span>
+                    <h3>700+</h3>
+                    <p>Total Members</p>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-3">
+                <div class="counter-text">
+                    <span class="box1"><span aria-hidden="true" class="icon-sad"></span></span>
+                    <h3>802+</h3>
+                    <p>Happy Members</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricind">
+        <div class="container">
+            <div class="col-md-4 col-sm-4">
+                <div class="package-box">
+                    <div class="package-header">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <h3>FREE ACCOUNT</h3>
+                    </div>
+                    <div class="package-info">
+                        <ul>
+                            <ul>
+                                <li>Free Jobs Post</li>
+                                <li>Unlimited Regular Job Post</li>
+                                <li>Unlimited Applicants</li>
+                                <li>Dashboard access to manage application</li>
+                                <li>E-Mail support available</li>
+                            </ul>
+                        </ul>
+                    </div>
+                    <div class="package-price">
+                        <h2><sup> </sup>Free<sub></sub></h2>
+                    </div>
+                    <a href="{{route('new_register')}}" class="btn btn-success m-10"><i class="la la-user-plus"></i>
+                        Sign Up</a>
+                </div>
+            </div>
+
+
+
+            @foreach($packages as $package)
+               {{-- <div class="col-xs-12 col-md-4">
+                    <div class="pricing-table-wrap bg-light pt-5 pb-5 text-center">
+                        <h1 class="display-4">{!! get_amount($package->price) !!}</h1>
+                        <h3>{{$package->package_name}}</h3>
+                        <div class="pricing-package-ribbon pricing-package-ribbon-green">Premium</div>
+
+                        <p class="mb-2 text-muted"> {{$package->premium_job}} Premium Jobs Post</p>
+                        <p class="mb-2 text-muted"> Unlimited Regular Job Post</p>
+                        <p class="mb-2 text-muted"> Unlimited Applicants</p>
+                        <p class="mb-2 text-muted"> Dashboard access to manage application</p>
+                        <p class="mb-2 text-muted"> E-Mail support available</p>
+                        <a href="{{route('checkout', $package->id)}}" class="btn btn-success mt-4"> <i
+                                class="la la-shopping-cart"></i> Purchas Package</a>
+                    </div>
+                </div>--}}
+
+                <div class="col-md-4 col-sm-4">
+                    <div class="package-box">
+                        <div class="package-header">
+                            <i class="fa fa-star-half-o" aria-hidden="true"></i>
+                            <h3>{{$package->package_name}}</h3>
+                        </div>
+                        <div class="package-info">
+                            <ul>
+                                <li>{{$package->premium_job}} Premium Jobs Post</li>
+                                <li>Unlimited Regular Job Post</li>
+                                <li>Unlimited Applicants</li>
+                                <li>Dashboard access to manage application</li>
+                                <li>E-Mail support available</li>
+                            </ul>
+                        </div>
+                        <div class="package-price">
+                            <h2><sup>GHC </sup>{!! get_amount($package->price) !!}</sub></h2>
+                        </div>
+                        <a href="{{route('checkout', $package->id)}}" class="btn btn-success mt-4"> <i
+                                class="la la-shopping-cart"></i> Purchas Package</a>
+                    </div>
+                </div>
+            @endforeach
+
+        </div>
+    </section>
+
+    {{--<div class="pricing-section bg-secondary pb-5 pt-5">
+        <div class="container">
+
+
+
+            <div class="row">
+
+                <div class="col-xs-12 col-md-4">
+                    <div class="pricing-table-wrap bg-light pt-5 pb-5 text-center">
+                        <h1 class="display-4">$0</h1>
+                        <h3>Free</h3>
+
+                        <div class="pricing-package-ribbon pricing-package-ribbon-light">Regular</div>
+
+                        <p class="mb-2 text-muted"> No Premium Job Post</p>
+                        <p class="mb-2 text-muted"> Unlimited Regular Job Post</p>
+                        <p class="mb-2 text-muted"> Unlimited Applicants</p>
+                        <p class="mb-2 text-muted"> Dashboard access to manage application</p>
+                        <p class="mb-2 text-muted"> No support available</p>
+
+                        <a href="{{route('new_register')}}" class="btn btn-success mt-4"><i class="la la-user-plus"></i>
+                            Sign Up</a>
+                    </div>
+                </div>
+
+                @foreach($packages as $package)
+                    <div class="col-xs-12 col-md-4">
+                        <div class="pricing-table-wrap bg-light pt-5 pb-5 text-center">
+                            <h1 class="display-4">{!! get_amount($package->price) !!}</h1>
+                            <h3>{{$package->package_name}}</h3>
+                            <div class="pricing-package-ribbon pricing-package-ribbon-green">Premium</div>
+
+                            <p class="mb-2 text-muted"> {{$package->premium_job}} Premium Jobs Post</p>
+                            <p class="mb-2 text-muted"> Unlimited Regular Job Post</p>
+                            <p class="mb-2 text-muted"> Unlimited Applicants</p>
+                            <p class="mb-2 text-muted"> Dashboard access to manage application</p>
+                            <p class="mb-2 text-muted"> E-Mail support available</p>
+                            <a href="{{route('checkout', $package->id)}}" class="btn btn-success mt-4"> <i
+                                    class="la la-shopping-cart"></i> Purchas Package</a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+        </div>
+    </div>--}}
+
+    {{--<div class="home-blog-section pb-5 pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="pricing-section-heading mb-5 text-center">
+                        <h1>From Our Blog</h1>
+                        <h5 class="text-muted">Check the latest updates/news from us.</h5>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="row">
+
+                @foreach($blog_posts as $post)
+
+                    <div class="col-md-4">
+
+                        <div class="blog-card-wrap bg-white p-3 mb-4">
+
+                            <div class="blog-card-img mb-4">
+                                <img src="{{$post->feature_image_thumb_uri}}" class="card-img"/>
+                            </div>
+
+                            <h4 class="mb-3">{{$post->title}}</h4>
+
+                            <p class="blog-card-text-preview">{!! limit_words($post->post_content) !!}</p>
+
+                            <a href="{{route('blog_post_single', $post->slug)}}" class="btn btn-success"> <i
+                                    class="la la-book"></i> Read More</a>
+
+                            <div class="blog-card-footer border-top pt-3 mt-3">
+                                <span><i class="la la-user"></i> {{$post->author->name}} </span>
+                                <span><i class="la la-clock-o"></i> {{$post->created_at->diffForHumans()}} </span>
+                                <span><i class="la la-eye"></i> {{$post->views}} </span>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                @endforeach
+
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="home-all-blog-posts-btn-wrap text-center my-3">
+
+                        <a href="" class="btn btn-success btn-lg"><i class="la la-link"></i> @lang('app.all_blog_posts')
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>--}}
+
+    <section class="newsletter">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
+                    <h2>Want More Job & Latest Job? </h2>
+                    <p>Subscribe to our mailing list to receive an update when new Job arrive!</p>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Type Your Email Address...">
+                        <span class="input-group-btn">
+							<button type="button" class="btn btn-default">subscribe!</button>
+						</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
 @endsection

@@ -1,0 +1,69 @@
+{
+  "name": "ovac/laravel-hubtel-payment",
+  "description": "A Laravel package for consuming the Hubtel Payment Api",
+  "license": "MIT",
+  "keywords": [
+    "laravel",
+    "hubtel",
+    "payment"
+  ],
+  "authors": [
+      {
+          "name": "Ariama Victor (A.K.A. OVAC BOYA)",
+          "email": "iamovac@gmail.com"
+      }
+  ],
+  "require": {
+    "php": ">=5.6.4",
+    "illuminate/support": "^5.4",
+    "ovac/hubtel-payment": "~2.0.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "~3.4|~3.5|~3.6",
+    "phpunit/phpunit": "~5.0|~6.0|~7.0",
+    "squizlabs/php_codesniffer": "^2.9.1",
+    "leaphub/phpcs-symfony2-standard": "^2.0.3",
+    "phpmd/phpmd" : "^2.6.0",
+    "sebastian/phpcpd": "*",
+    "satooshi/php-coveralls": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "OVAC\\LaravelHubtelPayment\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "OVAC\\LaravelHubtelPayment\\Tests\\": "tests"
+    },
+    "files": [
+      "vendor/phpunit/phpunit/src/Framework/Assert/Functions.php"
+    ]
+  },
+  "scripts": {
+    "phpunit"  : "phpunit",
+    "phpcpd"   : "phpcpd src",
+    "phpcs"    : "phpcs --standard=./vendor/leaphub/phpcs-symfony2-standard/leaphub/phpcs/Symfony2/ --extensions=php ./src",
+    "phpcbf"   : "phpcbf",
+    "phpmd"    : "phpmd ./src text phpmd.xml",
+    "phpcpd-ci": "phpcpd --log-pmd=./build/phpcpd-report.xml  ./src",
+    "phpmd-ci" : "phpmd ./src xml phpmd.xml --reportfile ./build/phpmd-report.xml",
+    "phpcs-ci" : "phpcs --standard=./vendor/leaphub/phpcs-symfony2-standard/leaphub/phpcs/Symfony2/ --report=checkstyle --report-file=./build/phpcs-checkstyle-report.xml --extensions=php src",
+    "test"     : "phpunit; composer phpcs; composer phpmd; composer phpcpd;",
+    "sami"     : "./sami.phar update ./sami.config.php -v",
+    "document" : "bin/document.sh;",
+    "coverage" : "coveralls -v"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "OVAC\\LaravelHubtelPayment\\ServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true
+  }
+}

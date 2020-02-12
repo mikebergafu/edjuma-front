@@ -1,9 +1,4 @@
 <?php
-header('Cache-Control: no-cache, must-revalidate');
-header('Access-Control-Allow-Origin:  *');
-header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE');
-header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Authorization');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -16,78 +11,225 @@ header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Autho
 |
 */
 
-Route::get('/', 'WelcomeController@index')->name('welcome');
-Route::post('/search', 'WelcomeController@search')->name('search');
-
+use App\Jobs\SendRegisterEmail;
+use App\Mail\RegisterMail;
+use Illuminate\Support\Facades\Mail;
 
 Auth::routes();
 
-Route::get('home/', 'HomeController@index')->name('home');
-Route::get('edjuma/logout','HomeController@logout')->name('elogout');
-//User
-Route::post('users/register','UserController@store')->name('users.register');
+Route::get('/', 'HomeController@index')->name('home');
+//Berg Test
+Route::get('/test-email', function (){
+
+    dispatch(new SendRegisterEmail(
+            [
+                'name' => 'B',
+                'email' => 'mikebergafu@gmail.com',
+                'message' => 'You registration has been successful. Thank you',
+                'subject' => 'Edjuma Jobs: Registration Notification',
+            ]
+        ));
+    return ' Email';
+})->name('bergy');
 
 
-//Corporate
-Route::get('/corporate/code/form', 'CorporateController@create')->name('corporate.code.form');
-Route::post('/corporate/get/code', 'CorporateController@store')->name('corporate.code.get');
 
-//Jobs
-Route::get('jobs/list', 'JobController@index')->name('jobs.list');
-Route::get('jobs/form', 'JobController@create')->name('jobs.add.form');
-Route::post('jobs/store', 'JobController@store')->name('jobs.store');
-Route::delete('jobs/delete/{id}', 'JobController@destroy')->name('jobs.delete');
-Route::get('jobs/category/list', 'JobCategoryController@index')->name('jobs.category.list');
-Route::get('jobs/category/list/auth/{category}/{uuid}', 'JobController@getJobsByCategory')->name('jobs.by.category');
-Route::get('jobs/category/list/{category}/{uuid}', 'FreeViewController@getJobsByCategory')->name('free.jobs.by.category');
+Route::get('clear', 'HomeController@clearCache')->name('clear_cache');
 
-//Poster Controller
-Route::get('jobs/posters/{uuid}/jobs', 'PosterController@index')->name('my.job.postings');
-Route::get('jobs/posters/{uuid}/applicants', 'PosterController@getMyApplicants')->name('my.jobs.applicants');
-Route::get('jobs/posters/job/applicants/{job_id}', 'PosterController@getThisJobsApplicants')->name('this.jobs.applicants');
-Route::get('jobs/posters/delete/{job_id}', 'PosterController@destroy')->name('delete.jobs');
+Route::get('new-register', 'HomeController@newRegister')->name('new_register');
+Route::get('job-seeker-register', 'UserController@registerJobSeeker')->name('register_job_seeker');
+Route::post('job-seeker-register', 'UserController@registerJobSeekerPost');
 
-Route::get('jobs/applicant/job/pro/status/{id}', 'ProController@showProDetails')->name('this.pro.status');
+Route::get('employer-register', 'UserController@registerEmployer')->name('register_employer');
+Route::post('employer-register', 'UserController@registerEmployerPost');
 
+Route::get('agent-register', 'UserController@registerAgent')->name('register_agent');
+Route::post('agent-register', 'UserController@registerAgentPost');
 
-//Apply Jobs
-Route::get('apply/jobs/list', 'ApplyJobController@index')->name('apply.jobs.list');
-Route::get('apply/jobs/{job}', 'ApplyJobController@store')->name('jobs.apply.form');
-//Route::post('apply/jobs/store', 'ApplyJobController@store')->name('jobs.store');
-Route::delete('apply/jobs/delete/{id}', 'ApplyJobController@destroy')->name('jobs.delete');
-Route::get('jobs/{user}/applied/jobs/{uuid}', 'JobController@getMyJobs')->name('my.jobs.applied');
+Route::post('get-states-options', 'LocationController@getStatesOption')->name('get_state_option_by_country');
 
-//Route::get('jobs/applied/jobs/{uuid}/{job}', 'JobController@getThisJobsApplicants')->name('this.jobs.applicants');
-
-//Resume
-Route::get('jobs/{user}/resumes/{uuid}', 'ResumeController@index')->name('resumes.index');
-Route::get('jobs/resume/page/{uuid}', 'ResumeController@create')->name('resume.form');
-Route::post('jobs/add/resume/{uuid}', 'ResumeController@store')->name('resume.store');
-Route::post('jobs/edit/resume/{resume}/{uuid}', 'ResumeController@edit')->name('resume.edit');
-
-//Get Resume by applicant id
-Route::get('jobs/applicant/{user_id}/resumes/{uuid}', 'PosterController@getApplicantResume')->name('applicant.resumes');
-//Shortlists an applicant
-Route::get('jobs/applicant/checkshortlist/{job_id}/{applicant_id}', 'PosterController@setShortlist')->name('applicant.set.shortlist');
-Route::get('jobs/applicant/shortlist/{job_id}/{applicant_id}', 'PosterController@setShortlist')->name('applicant.set.shortlist');
-Route::get('jobs/applicant/get/shortlist/{job_id}', 'PosterController@getShortlist')->name('applicant.get.shortlist');
-Route::get('jobs/applicant/set/hired/{job_id}/{applicant_id}', 'PosterController@setHired')->name('applicant.set.hired');
-Route::get('jobs/applicant/get/hired/{job_id}', 'PosterController@getHired')->name('applicant.get.hired');
-
-//Edjuma Pro
-Route::get('jobs/pro/applicant/docs/upload/{uuid}', 'ProController@index')->name('pro.docs.upload');
-Route::post('jobs/pro/applicant/docs/upload/{uuid}/new', 'ProController@store')->name('pro.docs.store');
-
-//Contacts
-Route::get('edjuma/contacts/{id}/index/{uuid}', 'ContactController@index')->name('contacts.add.form');
-Route::post('edjuma/contacts/{id}/index/{uuid}/add', 'ContactController@store')->name('contacts.add.add');
-
-Route::get('home/jobs/{uuid}', 'FreeViewController@index')->name('home.jobs');
-
-//Payment Test
-Route::get('edjuma/payment/test', 'PaymentControler@index')->name('pay.test');
-Route::get('edjuma/payment/makepayment', 'PaymentControler@makePayment')->name('pay.makepayment');
-Route::get('edjuma/payment/checkpayment', 'PaymentControler@checkPaymentStatus')->name('pay.checkpayment');
-Route::get('edjuma/image/test', 'ProController@showImage')->name('image.test');
+Route::get('apply_job', function (){
+    return redirect(route('home'));
+});
+Route::post('apply_job', ['as' => 'apply_job', 'uses'=>'JobController@applyJob']);
+Route::post('flag-job/{id}', ['as' => 'flag_job_post', 'uses'=>'JobController@flagJob']);
+Route::post('share-by-email', ['as' => 'share_by_email', 'uses'=>'JobController@shareByEmail']);
+Route::get('employer/{user_name}/jobs', 'JobController@jobsByEmployer')->name('jobs_by_employer');
+Route::post('follow-unfollow', 'FollowerController@followUnfollow')->name('follow_unfollow');
 
 
+Route::get('jobs/', 'JobController@jobsListing')->name('jobs_listing');
+
+Route::get('p/{slug}', ['as' => 'single_page', 'uses' => 'PostController@showPage']);
+
+Route::get('blog', 'PostController@blogIndex')->name('blog_index');
+Route::get('blog/{slug}', 'PostController@view')->name('blog_post_single');
+
+Route::get('pricing', 'HomeController@pricing')->name('pricing');
+
+Route::get('contact-us', 'HomeController@contactUs')->name('contact_us');
+Route::post('contact-us', 'HomeController@contactUsPost');
+
+
+//checkout
+Route::get('checkout/{package_id}', 'PaymentController@checkout')->name('checkout')->middleware('auth');
+Route::post('checkout/{package_id}', 'PaymentController@checkoutPost')->middleware('auth');
+
+Route::get('payment/{transaction_id}', 'PaymentController@payment')->name('payment');
+Route::post('payment/{transaction_id}', 'PaymentController@paymentPost');
+
+Route::any('payment/{transaction_id}/success', 'PaymentController@paymentSuccess')->name('payment_success');
+Route::any('payment-cancel', 'PaymentController@paymentCancelled')->name('payment_cancel');
+
+//PayPal
+Route::post('payment/{transaction_id}/paypal', 'PaymentController@paypalRedirect')->name('payment_paypal_pay');
+Route::any('payment/paypal-notify/{transaction_id?}', 'PaymentController@paypalNotify')->name('paypal_notify');
+
+
+Route::post('payment/{transaction_id}/stripe', 'PaymentController@paymentStripeReceive')->name('payment_stripe_receive');
+
+Route::post('payment/{transaction_id}/bank-transfer', 'PaymentController@paymentBankTransferReceive')->name('bank_transfer_submit');
+
+
+//Dashboard Route
+Route::group(['prefix'=>'dashboard', 'middleware' => 'dashboard'], function(){
+    Route::get('/', 'DashboardController@dashboard')->name('dashboard');
+
+    Route::get('applied-jobs', 'DashboardController@dashboard')->name('applied_jobs');
+
+
+    Route::group(['middleware'=>'admin_agent_employer'], function(){
+
+        Route::group(['prefix'=>'employer'], function(){
+
+            Route::group(['prefix'=>'job'], function(){
+                Route::get('new', 'JobController@newJob')->name('post_new_job');
+                //Route::get('new', 'JobController@newJobPoster')->name('post_new_job');
+                Route::post('new', 'JobController@newJobPost');
+                Route::post('wages', 'JobController@postTotalWage');
+                Route::post('newposter', 'JobController@newJobPostPoster')->name('newposter');
+                Route::get('edit/{job_id}', 'JobController@edit')->name('edit_job');
+                Route::post('edit/{job_id}', 'JobController@update');
+                Route::get('posted', 'JobController@postedJobs')->name('posted_jobs');
+            });
+
+            Route::get('applicant', 'UserController@employerApplicant')->name('employer_applicant');
+            Route::get('shortlisted', 'UserController@shortlistedApplicant')->name('shortlisted_applicant');
+            Route::get('hiredapplicant', 'UserController@hiredApplicant')->name('hired_applicant');
+            Route::get('applicant/{application_id}/shortlist', 'UserController@makeShortList')->name('make_short_list');
+            Route::get('applicant/{application_id}/hired', 'UserController@makeShortList')->name('make_hired');
+
+            Route::get('profile', 'UserController@employerProfile')->name('employer_profile');
+            Route::post('profile', 'UserController@employerProfilePost');
+
+        });
+        Route::group(['prefix'=>'jobs'], function(){
+            Route::get('/', 'JobController@pendingJobs')->name('pending_jobs');
+            Route::get('pending', 'JobController@approvedJobs')->name('approved_jobs');
+            Route::get('blocked', 'JobController@blockedJobs')->name('blocked_jobs');
+            Route::get('status/{id}/{status}', 'JobController@statusChange')->name('job_status_change');
+
+            Route::get('applicants/{job_id}', 'JobController@jobApplicants')->name('job_applicants');
+        });
+
+
+        Route::get('flagged', 'JobController@flaggedMessage')->name('flagged_jobs');
+
+
+        Route::group(['prefix'=>'cms'], function(){
+            Route::get('/', 'PostController@index')->name('pages');
+            Route::get('page/add', 'PostController@addPage')->name('add_page');
+            Route::post('page/add', 'PostController@store');
+
+            Route::get('page/edit/{id}', 'PostController@pageEdit')->name('page_edit');
+            Route::post('page/edit/{id}', 'PostController@pageEditPost');
+
+            Route::get('posts', 'PostController@indexPost')->name('posts');
+            Route::get('post/add', 'PostController@addPost')->name('add_post');
+            Route::post('post/add', 'PostController@storePost');
+
+            Route::get('post/edit/{id}', 'PostController@postEdit')->name('post_edit');
+            Route::post('post/edit/{id}', 'PostController@postUpdate');
+
+        });
+
+    });
+
+
+    Route::group(['middleware'=>'only_admin_access'], function(){
+
+        Route::group(['prefix'=>'categories'], function(){
+            Route::get('/', ['as'=>'dashboard_categories', 'uses' => 'CategoriesController@index']);
+            Route::post('/', ['uses' => 'CategoriesController@store']);
+
+            Route::get('edit/{id}', ['as'=>'edit_categories', 'uses' => 'CategoriesController@edit']);
+            Route::post('edit/{id}', ['uses' => 'CategoriesController@update']);
+
+            Route::post('delete-categories', ['as'=>'delete_categories', 'uses' => 'CategoriesController@destroy']);
+        });
+
+        //Settings
+        Route::group(['prefix'=>'settings'], function(){
+            Route::get('/', 'SettingsController@GeneralSettings')->name('general_settings');
+
+            Route::get('theme-settings', 'SettingsController@ThemeSettings')->name('theme_settings');
+            Route::get('gateways', 'SettingsController@GatewaySettings')->name('gateways_settings');
+            Route::get('pricing', 'SettingsController@PricingSettings')->name('pricing_settings');
+            Route::post('pricing', 'SettingsController@PricingSave');
+
+            //Save settings / options
+            Route::post('save-settings', ['as'=>'save_settings', 'uses' => 'SettingsController@update']);
+        });
+    });
+
+
+    Route::group(['prefix'=>'payments'], function() {
+        Route::get('/', 'PaymentController@index')->name('payments');
+        Route::get('/paynow/{id}', 'PaymentController@paynow')->name('paynow');
+
+        Route::get('view/{id}', ['as'=>'payment_view', 'uses' => 'PaymentController@view']);
+        Route::get('status-change/{id}/{status}', ['as'=>'status_change', 'uses' => 'PaymentController@markSuccess']);
+    });
+
+    Route::group(['prefix'=>'u'], function(){
+        Route::get('applied-jobs', 'UserController@appliedJobs')->name('applied_jobs');
+        Route::get('show-hired', 'UserController@showHiredJobs')->name('show_hired');
+        Route::get('show-completed', 'UserController@showCompletedJobs')->name('show_completed');
+        Route::get('show-cancelled', 'UserController@showCancelledJobs')->name('show_cancelled');
+        Route::get('applied-done/{id}', 'UserController@jobDone')->name('applied_done');
+        Route::get('applied-cancel/{id}', 'UserController@jobCancelled')->name('applied_cancelled');
+        Route::get('profile', 'UserController@profile')->name('profile');
+        Route::get('profile/edit', 'UserController@profileEdit')->name('profile_edit');
+        Route::post('profile/edit', 'UserController@profileEditPost');
+
+        Route::group(['prefix'=>'users'], function(){
+            Route::get('/', 'UserController@index')->name('users');
+            Route::get('view/{slug}', ['as'=>'users_view', 'uses' => 'UserController@show']);
+            Route::get('user_status/{id}/{status}', 'UserController@statusChange')->name('user_status');
+
+            //Edit
+            Route::get('edit/{id}', ['as'=>'users_edit', 'uses' => 'UserController@profileEdit']);
+            Route::post('edit/{id}', ['uses' => 'UserController@profileEditPost']);
+            Route::get('profile/change-avatar/{id}', ['as'=>'change_avatar', 'uses' => 'UserController@changeAvatar']);
+        });
+
+        /**
+         * Change Password route
+         */
+        Route::group(['prefix' => 'account'], function() {
+            Route::get('change-password', ['as' => 'change_password', 'uses' => 'UserController@changePassword']);
+            Route::post('change-password', 'UserController@changePasswordPost');
+        });
+
+    });
+
+    Route::group(['prefix' => 'account'], function() {
+        Route::get('change-password', 'UserController@changePassword')->name('change_password');
+        Route::post('change-password', 'UserController@changePasswordPost');
+    });
+
+});
+
+
+//Single Sigment View
+Route::get('{slug}', 'JobController@view')->name('job_view');

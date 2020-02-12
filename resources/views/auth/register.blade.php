@@ -1,274 +1,77 @@
-@extends('layouts.header')
-
-@section('title')
-    Sign Up - Edjuma.com
-@endsection
+@extends('layouts.theme')
 
 @section('content')
-    <!-- Titlebar
-    ================================================== -->
-    <div id="titlebar" class="single">
-        <div class="container">
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">{{ __('Register') }}</div>
 
-            <div class="sixteen columns">
-                <h2>My Account</h2>
-                <nav id="breadcrumbs">
-                    <ul>
-                        <li>You are here:</li>
-                        <li><a href="#">Home</a></li>
-                        <li>My Account</li>
-                    </ul>
-                </nav>
-            </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ route('register') }}">
+                        @csrf
 
-        </div>
-    </div>
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
-    <!-- Container -->
-    <div class="container">
+                            <div class="col-md-6">
+                                <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
 
-        <div class="my-account">
-
-            <article class="card">
-                <div class=" p-5">
-
-                    <ul class="nav bg radius nav-pills nav-fill mb-3" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active show" data-toggle="pill" href="#nav-tab-paypal">
-                                <i class="ln ln-icon-Male"></i> Personal</a></li>
-
-                        <li class="nav-item">
-                            <a class="nav-link " data-toggle="pill" href="#nav-tab-card">
-                                <i class="ln ln-icon-Bag"></i>  Company</a></li>
-                    </ul>
-
-                    <div class="tab-content">
-                        <div class="tab-pane fade active show" id="nav-tab-paypal">
-                            <p class="alert alert-success">Create Your Personal Account</p>
-                            <form method="POST" action="{{ route('users.register') }}">
-                                @csrf
-
-                                <input name="account_type" value="1" hidden/>
-                                <div class="form-group">
-                                    <div class="form-group">
-                                    <i class="ln ln-icon-Male"></i>
-                                    <label for="first_name">First Name:</label>
-                                        <input type="text" class="input-text" name="first_name" id="first_name" value="" required/>
-                                    </div>
-                                    @if ($errors->has('first_name'))
-                                        <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('first_name') }}</strong>
+                                @if ($errors->has('name'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('name') }}</strong>
                                     </span>
-                                    @endif
-                                </div>
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <i class="ln ln-icon-Male"></i>
-                                        <label for="last_name">Last Name:</label>
-                                        <input type="text" class="input-text" name="last_name" id="last_name" value=""  required/>
-                                    </div>
-
-                                    @if ($errors->has('last_name'))
-                                        <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('last_name') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <i class="ln ln-icon-Mail"></i>
-                                        <label for="email2">Email Address:</label>
-                                        <input type="text" class="input-text" name="email" id="email" value="" required/>
-                                    </div>
-
-                                    @if ($errors->has('email'))
-                                        <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="form-group">
-                                    <i class="ln ln-icon-Lock-2"></i>
-                                    <label for="password1">Password:</label>
-                                    <input class="input-text" type="password" name="password" id="password1" required/>
-                                    </div>
-
-                                    @if ($errors->has('password'))
-                                        <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <i class="ln ln-icon-Lock-2"></i>
-                                        <label for="password2">Repeat Password:</label>
-                                        <input class="input-text" type="password" id="password-confirm" name="password_confirmation" required/>
-                                    </div>
-
-                                </div>
-
-                                <p class="form-row">
-                                    <input type="submit" class="button border fw margin-top-10" name="register" value="Register" />
-                                </p>
-
-                            </form>
-                        </div> <!-- tab-pane.// -->
-
-
-
-
-
-                        <div class="tab-pane fade active show" id="nav-tab-card">
-                            <p class="alert alert-success">SignUp A Business Account</p>
-                            <form method="POST" action="{{ route('users.register') }}">
-                                @csrf
-                                <input name="account_type" value="2" hidden/>
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <i class="ln ln-icon-Male"></i>
-                                        <label for="first_name">Name Of Business:</label>
-                                        <input type="text" class="input-text" name="first_name" id="first_name" value="" required/>
-                                    </div>
-                                    @if ($errors->has('first_name'))
-                                        <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('first_name') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <i class="ln ln-icon-Location"></i>
-                                        <label for="last_name">Location:</label>
-                                        <input type="text" class="input-text" name="last_name" id="last_name" value=""  required/>
-                                    </div>
-
-                                    @if ($errors->has('last_name'))
-                                        <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('last_name') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <i class="ln ln-icon-Mail"></i>
-                                        <label for="email2">Email Address:</label>
-                                        <input type="text" class="input-text" name="email" id="email" value="" required/>
-                                    </div>
-
-                                    @if ($errors->has('email'))
-                                        <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <i class="ln ln-icon-Lock-2"></i>
-                                        <label for="password1">Password:</label>
-                                        <input class="input-text" type="password" name="password" id="password1" required/>
-                                    </div>
-
-                                    @if ($errors->has('password'))
-                                        <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <i class="ln ln-icon-Lock-2"></i>
-                                        <label for="password2">Repeat Password:</label>
-                                        <input class="input-text" type="password" id="password-confirm" name="password_confirmation" required/>
-                                    </div>
-
-                                </div>
-
-                                <p class="form-row">
-                                    <input type="submit" class="button border fw margin-top-10" name="register" value="Register" />
-                                </p>
-
-                            </form>
+                                @endif
+                            </div>
                         </div>
 
+                        <div class="form-group row">
+                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
-                        {{--<div class="tab-pane fade show " id="nav-tab-card">
-                            <p class="alert alert-success">Already have an account </p>
-                            <form method="POST" action="{{ route('login') }}">
-                                @csrf
+                            <div class="col-md-6">
+                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
 
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <i class="ln ln-icon-Male"></i>
-                                        <label for="username">Email:</label>
-                                        <input type="text" class="input-text" name="email" id="email" value="" required/>
-                                    </div>
-
-                                    @if ($errors->has('email'))
-                                        <span class="invalid-feedback">
+                                @if ($errors->has('email'))
+                                    <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
-                                    @endif
-                                </div>
+                                @endif
+                            </div>
+                        </div>
 
-                                <div class="form-group">
-                                    <div class="form-group">
-                                    <i class="ln ln-icon-Lock-2"></i>
-                                    <label for="password">Password:</label>
-                                    <input class="input-text" type="password" name="password" id="password"/>
-                                    </div>
+                        <div class="form-group row">
+                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
-                                     @if ($errors->has('password'))
-                                        <span class="invalid-feedback">
+                            <div class="col-md-6">
+                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
+
+                                @if ($errors->has('password'))
+                                    <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
-                                    @endif
-                                </div>
+                                @endif
+                            </div>
+                        </div>
 
-                                <p class="form-row">
-                                    <input type="submit" class="button border fw margin-top-10" name="login" value="Login" />
+                        <div class="form-group row">
+                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
 
-                                    <label for="rememberme" class="rememberme">
-                                        <input name="rememberme" type="checkbox" id="rememberme" value="forever" /> Remember Me</label>
-                                </p>
+                            <div class="col-md-6">
+                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                            </div>
+                        </div>
 
-                                <p class="lost_password">
-                                    <a href="#" >Lost Your Password?</a>
-                                </p>
-
-                            </form>
-                        </div>--}}
-
-                    </div> <!-- tab-content .// -->
-
-                </div> <!-- card-body.// -->
-            </article> <!-- card.// -->
-
-
-
-
-
-
-
-
-
+                        <div class="form-group row mb-0">
+                            <div class="col-md-6 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Register') }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-    @include('sweetalert::alert')
+</div>
 @endsection
-
-@section('scripts')
-    <script>
-        var btnLogin=document.getElementById('')
-    </script>
-@endsection
-
-
-
